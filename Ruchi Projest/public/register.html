@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="register-page">
+    <div class="form-container" style="max-width: 500px;">
+      <button class="back-btn" onclick="window.location.href='index.html'">
+        ← Back to Dashboard
+      </button>
+      <h2>Register Student</h2>
+      <input type="text" id="studentName" placeholder="Full Name">
+      <input type="text" id="rollNumber" placeholder="Roll Number">
+      <input type="password" id="studentPassword" placeholder="Create Password">
+      <select id="department">
+        <option>Computer Science and Engineering</option>
+        <option>Electronics</option>
+        <option>Electrical</option>
+        <option>Civil</option>
+        <option>Other</option>
+      </select>
+
+      <div class="camera-container" style="margin: 1rem 0;">
+        <video id="video" autoplay muted style="width: 100%; border-radius: 12px;"></video>
+      </div>
+
+      <button onclick="saveStudent()" id="registerBtn">Register Student</button>
+      
+      <div id="statusMsg" style="display:none; padding:0.75rem 1rem; border-radius:8px; margin-top:1rem; font-size:0.9rem; text-align:center;"></div>
+      
+      <script src="https://cdn.jsdelivr.net/npm/face-api.js/dist/face-api.min.js"></script>
+      <script>
+        const video = document.getElementById("video");
+        const registerBtn = document.getElementById("registerBtn");
+
+        // Load models and start video
+        Promise.all([
+          faceapi.nets.tinyFaceDetector.loadFromUri('./models'),
+          faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
+          faceapi.nets.faceRecognitionNet.loadFromUri('./models')
+        ]).then(startVideo);
+
+        function startVideo() {
+          navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+              video.srcObject = stream;
+            })
+            .catch(err => {
+              console.error(err);
+              showMsg("Camera permission denied", "error");
+            });
+        }
+
+        async function saveStudent() {
+          const name = document.getElementById("studentName").value.trim();
+          const roll = document.getElementById("rollNumber").value.trim();
+          const password = document.getElementById("studentPassword").value.trim();
+          const dept = document.getElementById("department").value;
+
+          if (!name || !roll || !password) {
+            showMsg("⚠️ Please fill in all fields.", "error");
+            return;
+          }
+
+          registerBtn.textContent = "Scanning face...";
+          registerBtn.disabled = true;
+
+          const detection = await faceapi
+            .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
+            .withFaceLandmarks()
+            .withFaceDescriptor();
+
+          if (!detection) {
+            showMsg("⚠️ No face detected. Please look into the camera.", "error");
+            registerBtn.textContent = "Register Student";
+            registerBtn.disabled = false;
+            return;
+          }
+
+          const descriptor = Array.from(detection.descriptor);
+
+          let students = JSON.parse(localStorage.getItem("students")) || [];
+          students.push({ name, roll, dept, password, descriptor, id: Date.now() });
+          localStorage.setItem("students", JSON.stringify(students));
+
+          showMsg("✓ Student registered successfully!", "success");
+
+          // Clear fields
+          document.getElementById("studentName").value = "";
+          document.getElementById("rollNumber").value = "";
+          document.getElementById("studentPassword").value = "";
+          document.getElementById("department").selectedIndex = 0;
+          
+          registerBtn.textContent = "Register Student";
+          registerBtn.disabled = false;
+        }
+
+        function showMsg(msg, type) {
+          const el = document.getElementById("statusMsg");
+          el.textContent = msg;
+          el.style.display = "block";
+          if (type === "success") {
+            el.style.color = "#22c55e";
+            el.style.background = "rgba(34,197,94,0.08)";
+          } else {
+            el.style.color = "#ffb347";
+            el.style.background = "rgba(255,179,71,0.08)";
+          }
+          setTimeout(() => { el.style.display = "none"; }, 4000);
+        }
+      </script>
+    </div>
+  </div>
+  <script src="mist.js"></script>
+</body>
+</html>

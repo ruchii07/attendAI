@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <div style="text-align:left; margin-bottom:1.5rem;">
+      <button class="back-btn" id="backBtn" onclick="goBackToDashboard()">
+        ← Back to Dashboard
+      </button>
+    </div>
+
+    <h2 class="page-title">Face Recognition Attendance</h2>
+
+    <!-- Auto-fill banner for student users -->
+    <div id="studentBanner" class="card" style="display:none; max-width:480px; margin:0 auto 1.5rem; text-align:center;">
+      <p style="margin-bottom:0;">Marking attendance for: <strong id="studentBannerName"></strong></p>
+    </div>
+
+    <div id="noStudentsCard" class="card" style="display:none;
+      max-width:360px; margin:0 auto 2rem; text-align:center;">
+      <p style="margin-bottom:1rem;">No students registered yet</p>
+      <button onclick="window.location.href='register.html'">
+        Register Students
+      </button>
+    </div>
+
+    <div class="camera-container">
+      <video id="video" autoplay muted></video>
+    </div>
+
+     <div class="action-buttons">
+       <button onclick="startFaceRecognition()">Start Face Scan</button>
+       <button onclick="recognizeFace()">Run Recognition</button>
+       <button id="markAttendanceBtn" onclick="confirmAttendance()" style="display:none; background: linear-gradient(135deg, #22c55e, #10b981);">Mark Attendance</button>
+     </div>
+ 
+     <div id="attendanceStatus" class="card" style="display:none; max-width:480px; margin:1.5rem auto; text-align:center; font-weight:600; border:1px solid rgba(255,255,255,0.1);"></div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/face-api.js/dist/face-api.min.js"></script>
+  <script src="faceRecognition.js"></script>
+  <script>
+    // Bug 6 Fix: Back button preserves role context via hash
+    function goBackToDashboard() {
+      const role = localStorage.getItem("currentRole");
+      if (role) {
+        window.location.href = 'index.html#' + role;
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const students = JSON.parse(localStorage.getItem("students")) || [];
+      if (students.length === 0) {
+        document.getElementById("noStudentsCard").style.display = "block";
+      }
+
+      // Auto-fill student name from currentUser
+      const currentUser = localStorage.getItem("currentUser");
+      const currentRole = localStorage.getItem("currentRole");
+      if (currentUser && currentRole === "student") {
+        const student = students.find(s => s.name.toLowerCase() === currentUser.toLowerCase());
+        if (student) {
+          document.getElementById("studentBanner").style.display = "block";
+          document.getElementById("studentBannerName").textContent = student.name;
+        }
+      }
+    });
+  </script>
+  <script src="mist.js"></script>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AttendAI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Decorative Background Blobs -->
+  <div style="position:fixed;top:-200px;left:-200px;width:600px;
+    height:600px;border-radius:50%;pointer-events:none;z-index:0;
+    background:radial-gradient(circle,rgba(192,193,255,0.06) 0%,transparent 70%);"></div>
+  <div style="position:fixed;bottom:-200px;right:-200px;width:600px;
+    height:600px;border-radius:50%;pointer-events:none;z-index:0;
+    background:radial-gradient(circle,rgba(221,183,255,0.06) 0%,transparent 70%);"></div>
+
+  <div style="position:relative; z-index:1;">
+    <header>
+      <h2>⭐ AttendAI</h2>
+      <p>AI Smart Attendance System</p>
+    </header>
+
+    <!-- 1. ROLE SELECTION VIEW -->
+    <div id="role-selection" style="display:block;">
+      <section class="hero">
+        <h1>Welcome to <span class="gradient">AttendAI</span></h1>
+        <p>A modern intelligent attendance management system powered by AI. Select your role to continue.</p>
+      </section>
+      <div class="biometric-section">
+        <div class="biometric-container">
+          <div class="biometric-card face-card" onclick="selectRole('teacher')">
+            <div class="icon">👨‍🏫</div>
+            <h3>Teacher</h3>
+            <p>Manage students, mark attendance, and view reports</p>
+          </div>
+          <div class="biometric-card finger-card" onclick="selectRole('student')">
+            <div class="icon">🎓</div>
+            <h3>Student</h3>
+            <p>View your attendance percentage and history</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. LOGIN VIEW -->
+    <div id="login-section" class="register-page" style="display:none; padding: 2rem 0; min-height: auto;">
+      <div class="form-container" style="margin: 0 auto;">
+        <button class="back-btn" onclick="showView('role-selection')">← Back to Roles</button>
+        <h2 id="login-title">Login</h2>
+        <input type="text" id="loginName" placeholder="Enter your full name">
+        <input type="password" id="loginPassword" placeholder="Enter password">
+        <button onclick="handleLogin()">Login</button>
+        <div id="teacherSignupLink" style="display:none; margin-top:1.2rem; text-align:center; font-size:0.85rem; color:rgba(194,198,214,0.6);">
+          First time? <a href="teacher-register.html" style="color:#2563eb; text-decoration:none; font-weight:600;">Sign Up Here</a>
+        </div>
+        <div id="loginErrorMsg" style="display:none; color:#ffb347; padding:0.75rem 1rem; border-radius:8px; background:rgba(255,179,71,0.08); margin-top:1rem; font-size:0.9rem; text-align:center;">
+          User not found.
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. TEACHER DASHBOARD VIEW -->
+    <div id="teacher-dashboard" style="display:none;">
+      <div style="padding: 1rem 3rem;">
+         <button class="back-btn" onclick="logout()">← Logout</button>
+      </div>
+      <section class="hero" style="padding-top: 1rem;">
+        <h1>Welcome, <span id="teacher-name-display" class="gradient">Teacher</span></h1>
+        <p>Manage the attendance system</p>
+      </section>
+
+      <div class="cards">
+        <div class="card card1">
+          <h3 id="teacher-stat-students">0</h3>
+          <p>Registered Students</p>
+        </div>
+        <div class="card card2">
+          <h3 id="teacher-stat-attendance">0</h3>
+          <p>Total Attendance</p>
+        </div>
+        <div class="card card3">
+          <h3 id="teacher-stat-rate">0%</h3>
+          <p>Attendance Rate</p>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="buttons">
+          <button onclick="goRegister()">Register Student</button>
+          <button onclick="goAttendance()">Start Attendance</button>
+          <button onclick="goReport()">Attendance Report</button>
+        </div>
+      </div>
+
+      <!-- Bug 3 Fix: Registered Students Table -->
+      <div class="page-wrapper" style="padding-top: 0;">
+        <h2 class="page-title" style="font-size: 1.2rem; margin-top: 2rem;">Registered Students</h2>
+        <div id="teacherNoStudentsCard" class="card" style="max-width:360px; margin:0 auto; text-align:center;">
+          <p style="margin-bottom:0;">No students registered yet</p>
+        </div>
+        <div id="teacherStudentTable" style="display:none; overflow-x:auto;"></div>
+      </div>
+
+      <section class="biometric-section">
+        <h2>Biometric Attendance</h2>
+        <div class="biometric-container">
+          <div class="biometric-card face-card" onclick="window.location.href='attendance.html'">
+            <div class="icon">📷</div>
+            <h3>Face Recognition</h3>
+            <p>Mark attendance using AI facial recognition</p>
+          </div>
+          <div class="biometric-card finger-card" onclick="startFingerprint()">
+            <div class="icon">🖐️</div>
+            <h3>Fingerprint Scan</h3>
+            <p>Secure biometric fingerprint authentication</p>
+            <div id="fingerprintStatus" style="display:none; margin-top:0.75rem; padding:0.6rem 1rem; border-radius:8px; font-size:0.82rem; text-align:center; transition:0.3s;"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 4. STUDENT DASHBOARD VIEW -->
+    <div id="student-dashboard" style="display:none;">
+      <div style="padding: 1rem 3rem;">
+         <button class="back-btn" onclick="logout()">← Logout</button>
+      </div>
+      <section class="hero" style="padding-top: 1rem;">
+        <h1>Welcome, <span class="gradient" id="student-name-display">Student</span></h1>
+        <p>Your Attendance Overview</p>
+      </section>
+
+      <!-- Bug 2 Fix: Profile Card -->
+      <div class="cards" style="max-width: 500px;">
+        <div class="card" style="width: 100%; text-align: left; cursor: default;">
+          <div style="display:flex; align-items:center; gap:1.2rem;">
+            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#14b8a6);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">🎓</div>
+            <div style="flex:1;">
+              <h3 id="profile-name" style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#e2e2eb;margin-bottom:0.3rem;">—</h3>
+              <p style="font-family:'DM Mono',monospace;font-size:0.75rem;color:rgba(194,198,214,0.6);margin:0;">Roll: <span id="profile-roll">—</span> &nbsp;|&nbsp; Dept: <span id="profile-dept">—</span></p>
+              <p style="font-family:'DM Mono',monospace;font-size:0.75rem;color:#14b8a6;margin:0.3rem 0 0;">Sessions Attended: <span id="profile-sessions">0</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="card card1" style="max-width: 300px; margin: 0 auto;">
+          <h3 id="student-attendance-rate">0%</h3>
+          <p>Your Attendance Rate</p>
+        </div>
+      </div>
+
+      <!-- Bug 1 Fix: Mark My Attendance Button -->
+      <div class="quick-actions">
+        <div class="buttons">
+          <button onclick="window.location.href='attendance.html'">📷 Mark My Attendance</button>
+        </div>
+      </div>
+
+      <div class="page-wrapper" style="padding-top: 0;">
+        <h2 class="page-title" style="font-size: 1.2rem; margin-top: 2rem;">Attendance History</h2>
+        <div id="studentNoRecordsCard" class="card" style="max-width:360px; margin:0 auto; text-align:center;">
+          <p style="margin-bottom:0;">No attendance records found</p>
+        </div>
+        <div id="studentReportTable" style="display:none; overflow-x:auto;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/face-api.js/dist/face-api.min.js"></script>
+  <script src="faceRecognition.js"></script>
+  <script src="fingerprint.js"></script>
+  <script src="script.js"></script>
+  <script>
+    let currentRole = "";
+
+    function showView(viewId) {
+      document.getElementById("role-selection").style.display = "none";
+      document.getElementById("login-section").style.display = "none";
+      document.getElementById("teacher-dashboard").style.display = "none";
+      document.getElementById("student-dashboard").style.display = "none";
+      
+      document.getElementById(viewId).style.display = "block";
+    }
+
+    function selectRole(role) {
+      currentRole = role;
+      document.getElementById("login-title").textContent = role === 'teacher' ? "Teacher Login" : "Student Login";
+      document.getElementById("loginName").value = "";
+      document.getElementById("loginPassword").value = "";
+      document.getElementById("loginErrorMsg").style.display = "none";
+      
+      // Show sign-up link for teachers only
+      document.getElementById("teacherSignupLink").style.display = role === 'teacher' ? "block" : "none";
+      
+      showView('login-section');
+    }
+
+    function handleLogin() {
+      const nameInput = document.getElementById("loginName").value.trim();
+      const passwordInput = document.getElementById("loginPassword").value.trim();
+      const errorMsg = document.getElementById("loginErrorMsg");
+      
+      if (!nameInput || !passwordInput) {
+        errorMsg.textContent = "Please enter name and password.";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      const students = JSON.parse(localStorage.getItem("students")) || [];
+      const attendance = JSON.parse(localStorage.getItem("attendance")) || [];
+
+      if (currentRole === 'teacher') {
+        const teachers = JSON.parse(localStorage.getItem("teachers")) || [];
+        const teacher = teachers.find(t => t.name.toLowerCase() === nameInput.toLowerCase() && t.password === passwordInput);
+        
+        if (teacher || (nameInput.toLowerCase() === 'admin' && passwordInput === 'admin123')) {
+          localStorage.setItem("currentUser", teacher ? teacher.name : "Admin");
+          localStorage.setItem("currentRole", "teacher");
+          showView('teacher-dashboard');
+          loadTeacherDashboard();
+        } else {
+          errorMsg.textContent = "Invalid credentials. If first time, please Sign Up.";
+          errorMsg.style.display = "block";
+        }
+      } else {
+        // Student login: validate name and password
+        const student = students.find(s => s.name.toLowerCase() === nameInput.toLowerCase() && s.password === passwordInput);
+        if (student) {
+          // Set currentUser and currentRole in localStorage
+          localStorage.setItem("currentUser", student.name);
+          localStorage.setItem("currentRole", "student");
+
+          showView('student-dashboard');
+          loadStudentDashboard(student, attendance);
+        } else {
+          errorMsg.textContent = "Invalid name or password.";
+          errorMsg.style.display = "block";
+        }
+      }
+    }
+
+    function logout() {
+      currentRole = "";
+      localStorage.removeItem("currentUser");
+      localStorage.removeItem("currentRole");
+      document.getElementById("loginName").value = "";
+      document.getElementById("loginPassword").value = "";
+      showView('role-selection');
+    }
+
+    // ── Student Dashboard Loader ─────────────────
+    function loadStudentDashboard(student, attendance) {
+      document.getElementById("student-name-display").textContent = student.name;
+
+      // Bug 2 Fix: Populate profile card
+      document.getElementById("profile-name").textContent = student.name;
+      document.getElementById("profile-roll").textContent = student.roll || "—";
+      document.getElementById("profile-dept").textContent = student.dept || "—";
+
+      const myAttendance = attendance.filter(a => a.name.toLowerCase() === student.name.toLowerCase());
+      document.getElementById("profile-sessions").textContent = myAttendance.length;
+
+      // Calculate attendance rate
+      // Robust calculation: my sessions / total unique dates classes were held
+      const totalSessionsDates = new Set(attendance.map(a => new Date(a.time).toDateString()));
+      const totalSessionsCount = totalSessionsDates.size || 1; 
+      let rate = ((myAttendance.length / totalSessionsCount) * 100).toFixed(1);
+      document.getElementById("student-attendance-rate").textContent = rate + "%";
+
+      // Populate attendance history table
+      if (myAttendance.length > 0) {
+        document.getElementById("studentNoRecordsCard").style.display = "none";
+        document.getElementById("studentReportTable").style.display = "block";
+        let html = `<table class="report-table"><thead><tr><th>Date / Time</th><th>Status</th></tr></thead><tbody>`;
+        // Sort by time descending
+        myAttendance.sort((a,b) => new Date(b.time) - new Date(a.time)).forEach(record => {
+          html += `<tr><td>${record.time}</td><td><span style="color:#22c55e;">Present</span></td></tr>`;
+        });
+        html += "</tbody></table>";
+        document.getElementById("studentReportTable").innerHTML = html;
+      } else {
+        document.getElementById("studentNoRecordsCard").style.display = "block";
+        document.getElementById("studentReportTable").style.display = "none";
+      }
+    }
+
+    // ── Teacher Dashboard Loader ─────────────────
+    function loadTeacherDashboard() {
+      const currentUser = localStorage.getItem("currentUser") || "Teacher";
+      document.getElementById("teacher-name-display").textContent = currentUser;
+      
+      const students = JSON.parse(localStorage.getItem("students")) || [];
+      const attendance = JSON.parse(localStorage.getItem("attendance")) || [];
+
+      // Update stat cards
+      document.getElementById("teacher-stat-students").textContent = students.length;
+      document.getElementById("teacher-stat-attendance").textContent = attendance.length;
+
+      // Bug 4 Fix: rate = unique students present today / total students registered
+      let rate = "0%";
+      if (students.length > 0) {
+        const todayStr = new Date().toDateString();
+        const todayRecords = attendance.filter(a => {
+          return new Date(a.time).toDateString() === todayStr;
+        });
+        const uniquePresentToday = new Set(todayRecords.map(a => a.name.toLowerCase())).size;
+        rate = ((uniquePresentToday / students.length) * 100).toFixed(1) + "%";
+      }
+      document.getElementById("teacher-stat-rate").textContent = rate;
+
+      // Populate registered students table
+      if (students.length > 0) {
+        document.getElementById("teacherNoStudentsCard").style.display = "none";
+        document.getElementById("teacherStudentTable").style.display = "block";
+        let html = `<table class="report-table"><thead><tr><th>Name</th><th>Roll No.</th><th>Department</th><th>Action</th></tr></thead><tbody>`;
+        students.forEach(s => {
+          html += `<tr>
+            <td>${s.name || "—"}</td>
+            <td>${s.roll || "—"}</td>
+            <td>${s.dept || "—"}</td>
+            <td><button onclick="confirmDeleteStudent('${s.name}')" style="background:rgba(239, 68, 68, 0.1); color:#ef4444; border:1px solid rgba(239, 68, 68, 0.2); padding:4px 10px; border-radius:6px; cursor:pointer; font-size:0.8rem;">Delete</button></td>
+          </tr>`;
+        });
+        html += "</tbody></table>";
+        document.getElementById("teacherStudentTable").innerHTML = html;
+      } else {
+        document.getElementById("teacherNoStudentsCard").style.display = "block";
+        document.getElementById("teacherStudentTable").style.display = "none";
+      }
+    }
+
+    function confirmDeleteStudent(name) {
+      if (confirm(`Are you sure you want to delete student "${name}"? This will remove their profile and biometric data.`)) {
+        let students = JSON.parse(localStorage.getItem("students")) || [];
+        students = students.filter(s => s.name !== name);
+        localStorage.setItem("students", JSON.stringify(students));
+        
+        // Also remove their attendance if desired, but user usually wants to keep history
+        // For now, just delete the student profile.
+        
+        loadTeacherDashboard();
+      }
+    }
+
+    function showFingerprintStatus(msg, type) {
+      const el = document.getElementById("fingerprintStatus");
+      if (!el) return;
+      el.textContent = msg;
+      el.style.display = "block";
+      el.style.background = type === "success"
+        ? "rgba(34,197,94,0.08)"
+        : "rgba(255,179,71,0.08)";
+      el.style.color = type === "success" ? "#22c55e" : "#ffb347";
+      setTimeout(() => { el.style.display = "none"; }, 4000);
+    }
+
+    // ── Bug 6 Fix: Restore session from hash on page load ────
+    (function restoreSession() {
+      const hash = window.location.hash; // e.g. #teacher or #student
+      const savedRole = localStorage.getItem("currentRole");
+      const savedUser = localStorage.getItem("currentUser");
+
+      if (savedRole && savedUser && (hash === '#teacher' || hash === '#student' || savedRole)) {
+        currentRole = savedRole;
+        if (savedRole === 'teacher') {
+          showView('teacher-dashboard');
+          loadTeacherDashboard();
+        } else if (savedRole === 'student') {
+          const students = JSON.parse(localStorage.getItem("students")) || [];
+          const attendance = JSON.parse(localStorage.getItem("attendance")) || [];
+          const student = students.find(s => s.name.toLowerCase() === savedUser.toLowerCase());
+          if (student) {
+            showView('student-dashboard');
+            loadStudentDashboard(student, attendance);
+          }
+        }
+      }
+      // Clean hash from URL
+      if (hash) history.replaceState(null, '', window.location.pathname);
+    })();
+  </script>
+  <script src="mist.js"></script>
+</body>
+</html>

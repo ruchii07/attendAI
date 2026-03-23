@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Decorative Background Blobs -->
+  <div style="position:fixed;top:-200px;left:-200px;width:600px;
+    height:600px;border-radius:50%;pointer-events:none;z-index:0;
+    background:radial-gradient(circle,rgba(192,193,255,0.06) 0%,transparent 70%);"></div>
+  
+  <div class="register-page">
+    <div class="form-container" style="max-width: 500px;">
+      <button class="back-btn" onclick="window.location.href='index.html'">
+        ← Back to Roles
+      </button>
+      <h2>Teacher Sign Up</h2>
+      <p style="margin-bottom:1.5rem; color:rgba(194,198,214,0.6); font-size:0.9rem;">Create your account to manage students and attendance.</p>
+      
+      <input type="text" id="teacherName" placeholder="Full Name">
+      <input type="password" id="teacherPassword" placeholder="Create Password">
+      
+      <button onclick="saveTeacher()" id="registerBtn">Create Account</button>
+      
+      <div id="statusMsg" style="display:none; padding:0.75rem 1rem; border-radius:8px; margin-top:1rem; font-size:0.9rem; text-align:center;"></div>
+      
+      <script>
+        function saveTeacher() {
+          const name = document.getElementById("teacherName").value.trim();
+          const password = document.getElementById("teacherPassword").value.trim();
+          const registerBtn = document.getElementById("registerBtn");
+
+          if (!name || !password) {
+            showMsg("⚠️ Please fill in all fields.", "error");
+            return;
+          }
+
+          let teachers = JSON.parse(localStorage.getItem("teachers")) || [];
+          
+          // Check if teacher already exists
+          if (teachers.find(t => t.name.toLowerCase() === name.toLowerCase())) {
+            showMsg("⚠️ An account with this name already exists.", "error");
+            return;
+          }
+
+          teachers.push({ name, password, id: Date.now() });
+          localStorage.setItem("teachers", JSON.stringify(teachers));
+
+          showMsg("✓ Account created successfully! Redirecting to login...", "success");
+          
+          registerBtn.disabled = true;
+          setTimeout(() => {
+            window.location.href = "index.html#teacher";
+          }, 2000);
+        }
+
+        function showMsg(msg, type) {
+          const el = document.getElementById("statusMsg");
+          el.textContent = msg;
+          el.style.display = "block";
+          if (type === "success") {
+            el.style.color = "#22c55e";
+            el.style.background = "rgba(34,197,94,0.08)";
+          } else {
+            el.style.color = "#ffb347";
+            el.style.background = "rgba(255,179,71,0.08)";
+          }
+          setTimeout(() => { if(el) el.style.display = "none"; }, 4000);
+        }
+      </script>
+    </div>
+  </div>
+  <script src="mist.js"></script>
+</body>
+</html>

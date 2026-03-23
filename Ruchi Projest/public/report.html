@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <div style="text-align:left; margin-bottom:1.5rem;">
+      <button class="back-btn" onclick="goBackToDashboard()">
+        ← Back to Dashboard
+      </button>
+    </div>
+
+    <h2 class="page-title">Attendance Report</h2>
+
+    <div id="noRecordsCard" class="card"
+      style="max-width:360px; margin:0 auto; text-align:center;">
+      <p style="margin-bottom:1rem;">No attendance records found</p>
+      <button onclick="window.location.href='attendance.html'">
+        Mark Attendance
+      </button>
+    </div>
+
+    <div id="reportTable" style="display:none; overflow-x:auto;"></div>
+
+  </div>
+
+  <script>
+    // Bug 6 Fix: Back button preserves role context via hash
+    function goBackToDashboard() {
+      const role = localStorage.getItem("currentRole");
+      if (role) {
+        window.location.href = 'index.html#' + role;
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const attendance = JSON.parse(localStorage.getItem("attendance")) || [];
+
+      if (attendance.length === 0) return;
+
+      document.getElementById("noRecordsCard").style.display = "none";
+      document.getElementById("reportTable").style.display = "block";
+
+      let html = `
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Roll No.</th>
+              <th>Department</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      attendance.forEach(function (record) {
+        html += `
+          <tr>
+            <td>${record.name || "—"}</td>
+            <td>${record.roll || "—"}</td>
+            <td>${record.dept || "—"}</td>
+            <td>${record.time || "—"}</td>
+          </tr>
+        `;
+      });
+
+      html += "</tbody></table>";
+      document.getElementById("reportTable").innerHTML = html;
+    });
+  </script>
+  <script src="mist.js"></script>
+</body>
+</html>
