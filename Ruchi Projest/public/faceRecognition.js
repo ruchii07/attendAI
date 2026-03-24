@@ -182,7 +182,32 @@ window.recognizeFace = async function () {
 window.confirmAttendance = async function() {
   if (!window.matchedStudent) return;
   
-  const teacherId = localStorage.getItem("teacherDbId");
+  let teacherId = localStorage.getItem("teacherDbId");
+
+  // If student is logged in, resolve teacherId from their student record
+  if (!teacherId && localStorage.getItem("currentRole") === "student") {
+    const studentId = localStorage.getItem("studentDbId");
+    if (studentId) {
+      const { data: stu } = await _supabase.from("students").select("teacher_id").eq("id", studentId).single();
+      if (stu) teacherId = stu.teacher_id;
+    }
+  }
+
+  // Prevent duplicate attendance on the same day
+  const today = new Date().toISOString().substring(0, 10); // YYYY-MM-DD
+  const { data: existing } = await _supabase
+    .from("attendance")
+    .select("id")
+    .eq("student_name", window.matchedStudent.name)
+    .eq("teacher_id", teacherId)
+    .gte("marked_at", today + "T00:00:00")
+    .lte("marked_at", today + "T23:59:59");
+
+  if (existing && existing.length > 0) {
+    showStatus("⚠️ Attendance already marked for " + window.matchedStudent.name + " today!", "error");
+    return;
+  }
+
   const record = {
     student_name: window.matchedStudent.name,
     teacher_id: teacherId,
