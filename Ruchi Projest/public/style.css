@@ -1619,16 +1619,21 @@ video {
   #teacher-dashboard { flex-direction: column !important; height: auto !important; }
   .t-sidebar {
     width: 100% !important; height: auto !important;
-    flex-direction: row !important; flex-wrap: wrap;
-    padding: 0.8rem 1rem !important;
+    flex-direction: row !important; flex-wrap: nowrap;
+    padding: 0.6rem 0.8rem !important;
     position: sticky; top: 0; z-index: 50;
-    align-items: center; gap: 0.5rem;
+    align-items: center; gap: 0.3rem;
     border-right: none !important;
     border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+    background: rgba(15,17,23,0.97) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
-  .t-logo { margin-bottom: 0 !important; font-size: 1rem; }
+  .t-logo { margin-bottom: 0 !important; font-size: 1rem; padding: 0 0.5rem 0 0 !important; border-bottom: none !important; flex-shrink: 0; }
   .t-nav-section-label { display: none !important; }
-  .t-nav-item { font-size: 11px; padding: 6px 10px !important; }
+  .t-nav-item { font-size: 11px; padding: 6px 10px !important; white-space: nowrap; flex-shrink: 0; }
   .t-sidebar > div:last-child { display: none; } /* hide logout from sidebar on mobile */
 
   .t-main { padding: 1rem !important; min-height: auto !important; }

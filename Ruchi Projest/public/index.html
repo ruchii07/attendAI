@@ -832,11 +832,12 @@
       document.getElementById('t-topbar-title').textContent = titles[name] || '';
 
       // Lazy render for specific tabs
+      if (name === 'overview') { renderTodaySchedule(); renderAttendanceBanner(); }
       if (name === 'students') renderStudentsTab();
       if (name === 'reports') renderReportsTab();
       if (name === 'attendance') renderAttendanceBanner();
       if (name === 'profile') renderProfileTab();
-      if (name === 'schedule') renderScheduleWeekly();
+      if (name === 'schedule') { renderScheduleWeekly(); loadScheduleTable(); }
     }
 
     function renderStudentsTab() {
