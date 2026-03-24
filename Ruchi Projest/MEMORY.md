@@ -1,24 +1,25 @@
-# Agent Memory — Landing Page Redesign
+# Agent Memory — Supabase Bug Fixes
 
-## What This Page Does
-index.html is the role-selection landing page for AttendAI.
-User sees two cards: Teacher and Student. Clicking a card
-navigates to the respective dashboard/flow.
+## Project Type
+Multi-page HTML project with Supabase backend.
+Auth is handled via Supabase client SDK (CDN).
+Tables involved: teachers, students, attendance
 
-## Your Only Job
-Redesign ONLY the visual layout and styling of index.html
-and style.css for the landing page. The mist.js WebGL
-background is already working — do not touch it.
+## Your 3 Jobs — Fix These Bugs Only
+BUG 1 → teacher-register.html: after signup, redirect to login page
+BUG 2 → Login: if user deleted from Supabase DB, show "User not found"
+         error message instead of silently failing or crashing
+BUG 3 → Student login: registered students can't login to dashboard
 
 ## Hard Rules
-- DO NOT remove or modify onclick handlers on the cards
-- DO NOT touch mist.js, faceRecognition.js, fingerprint.js
-- DO NOT change navigation logic or localStorage
-- DO NOT add new JS libraries
-- mist.js script tag must stay at bottom of body
-- Output full files — no partial snippets
+- DO NOT change Supabase project URL or anon key
+- DO NOT change face-api model loading or descriptor logic
+- DO NOT remove or rename any HTML element IDs used by other scripts
+- DO NOT use alert() anywhere — always use inline error divs
+- Output every modified file COMPLETELY
 
 ## File Checklist
-[x] MEMORY.md
-[ ] public/index.html   — full layout redesign
-[ ] public/style.css    — landing page styles added/updated
+[ ] MEMORY.md
+[ ] teacher-register.html — fix post-signup redirect to login
+[ ] index.html (or login page) — fix BUG 2 error message + BUG 3 student login
+[ ] Any shared auth JS file if it exists

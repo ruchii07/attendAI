@@ -21,54 +21,98 @@
       
       <input type="text" id="teacherName" placeholder="Full Name">
       <input type="password" id="teacherPassword" placeholder="Create Password">
+      <input type="password" id="accessCode" placeholder="School Access Code (Required)">
       
       <button onclick="saveTeacher()" id="registerBtn">Create Account</button>
       
       <div id="statusMsg" style="display:none; padding:0.75rem 1rem; border-radius:8px; margin-top:1rem; font-size:0.9rem; text-align:center;"></div>
       
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
       <script>
-        function saveTeacher() {
+        const _supabase = supabase.createClient(
+          "https://ygxrmeugswqykhxlfjkl.supabase.co",
+          "sb_publishable_ZpXluIMDi4ebS-9MkIFAsA_Sr_imexZ"
+        )
+      </script>
+      <script>
+        async function saveTeacher() {
           const name = document.getElementById("teacherName").value.trim();
           const password = document.getElementById("teacherPassword").value.trim();
+          const accessCode = document.getElementById("accessCode").value.trim();
           const registerBtn = document.getElementById("registerBtn");
 
-          if (!name || !password) {
-            showMsg("⚠️ Please fill in all fields.", "error");
+          if (!name || !password || !accessCode) {
+            showError("⚠️ Please fill in all fields.");
             return;
           }
 
-          let teachers = JSON.parse(localStorage.getItem("teachers")) || [];
-          
-          // Check if teacher already exists
-          if (teachers.find(t => t.name.toLowerCase() === name.toLowerCase())) {
-            showMsg("⚠️ An account with this name already exists.", "error");
+          // Hardcoded admin secret - easy to change or grab from database
+          if (accessCode !== "ATTENDAI-ADMIN") {
+            showError("⚠️ Invalid School Access Code. Registration blocked.");
             return;
           }
 
-          teachers.push({ name, password, id: Date.now() });
-          localStorage.setItem("teachers", JSON.stringify(teachers));
-
-          showMsg("✓ Account created successfully! Redirecting to login...", "success");
-          
           registerBtn.disabled = true;
-          setTimeout(() => {
-            window.location.href = "index.html#teacher";
-          }, 2000);
+          registerBtn.textContent = "Creating Account...";
+
+          // 1. Create auth user
+          const email = name.toLowerCase().replace(/\s/g,'') + "@attendai.app";
+          const { data: authData, error: authError } = await _supabase.auth.signUp({
+            email: email,
+            password: password
+          });
+          
+          if (authError) {
+            showError(authError.message);
+            registerBtn.disabled = false;
+            registerBtn.textContent = "Create Account";
+            return;
+          }
+
+          // 2. Insert into teachers table
+          // Generate a temp employee ID since it's on the teacher dashboard now
+          const empId = "EMP-" + Math.floor(1000 + Math.random() * 9000);
+
+          const { error: dbError } = await _supabase.from("teachers").insert({
+            user_id: authData.user.id,
+            name: name,
+            employee_id: empId,
+            subject: "",
+            department: ""
+          });
+
+          if (dbError) {
+            showError("Registration failed: " + dbError.message);
+            registerBtn.disabled = false;
+            registerBtn.textContent = "Create Account";
+            return;
+          }
+
+          // ✅ FIX: Show success then redirect to login
+          showSuccess("Account created! Redirecting to login...");
+          setTimeout(function () {
+            window.location.href = "index.html";
+          }, 1500);
         }
 
-        function showMsg(msg, type) {
+        function showError(msg) {
           const el = document.getElementById("statusMsg");
+          if (!el) return;
           el.textContent = msg;
           el.style.display = "block";
-          if (type === "success") {
-            el.style.color = "#22c55e";
-            el.style.background = "rgba(34,197,94,0.08)";
-          } else {
-            el.style.color = "#ffb347";
-            el.style.background = "rgba(255,179,71,0.08)";
-          }
-          setTimeout(() => { if(el) el.style.display = "none"; }, 4000);
+          el.style.color = "#ffb347";
+          el.style.background = "rgba(255,179,71,0.08)";
         }
+
+        function showSuccess(msg) {
+          const el = document.getElementById("statusMsg");
+          if (!el) return;
+          el.textContent = msg;
+          el.style.display = "block";
+          el.style.color = "#22c55e";
+          el.style.background = "rgba(34,197,94,0.08)";
+        }
+
       </script>
     </div>
   </div>

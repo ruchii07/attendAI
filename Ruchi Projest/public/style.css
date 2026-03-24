@@ -1264,3 +1264,313 @@ video {
 .add-slot-form button:hover {
   background: #0f766e;
 }
+
+/* ── TEACHER SIDEBAR DASHBOARD ─────────────────────────────── */
+.t-sidebar {
+  width: 200px;
+  min-width: 200px;
+  height: 100vh;
+  overflow: hidden;
+  background: rgba(255,255,255,0.02);
+  border-right: 0.5px solid rgba(255,255,255,0.06);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.t-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: #c0c1ff;
+  padding: 1.4rem 1.2rem 1rem;
+  border-bottom: 0.5px solid rgba(255,255,255,0.05);
+}
+
+.t-nav-section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
+  padding: 1rem 1.2rem 0.4rem;
+}
+
+.t-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.55rem 1.2rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+  user-select: none;
+}
+
+.t-nav-item:hover {
+  color: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.03);
+}
+
+.t-nav-item.active {
+  color: #e2e2eb;
+  background: rgba(255,255,255,0.05);
+  border-left-color: #2563eb;
+}
+
+.t-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.t-topbar {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  border-bottom: 0.5px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+
+.t-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.t-section {
+  animation: tFadeIn 0.15s ease;
+}
+
+@keyframes tFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.t-avatar-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b0f8c, #6d28d9);
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.t-avatar-lg {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b0f8c, #6d28d9);
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.t-card {
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.t-pill {
+  background: rgba(255,255,255,0.05);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 9999px;
+  padding: 3px 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.t-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.t-stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.07);
+  border-left: 2px solid #89ceff;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.t-stat-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: #e2e2eb;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.t-stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(194,198,214,0.5);
+}
+
+.t-stat-input {
+  font-family: 'DM Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: #e2e2eb;
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 6px;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.t-stat-input::-webkit-inner-spin-button,
+.t-stat-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+.t-stat-input:hover, .t-stat-input:focus {
+  background: rgba(0,0,0,0.2);
+  border-radius: 6px;
+  padding: 2px 4px;
+}
+
+.t-action-card {
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.t-action-card:hover {
+  background: rgba(255,255,255,0.07);
+  transform: translateY(-2px);
+}
+
+.t-action-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #e2e2eb;
+  margin-top: 8px;
+  margin-bottom: 2px;
+}
+
+.t-action-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  font-family: 'DM Mono', monospace;
+}
+
+.t-biometric-card {
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.t-biometric-card:hover {
+  background: rgba(255,255,255,0.07);
+  transform: translateY(-3px);
+}
+
+.t-biometric-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #e2e2eb;
+  margin: 1rem 0 0.4rem;
+}
+
+.t-biometric-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  font-family: 'DM Mono', monospace;
+}
+
+.t-label {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 5px;
+}
+
+.t-input {
+  background: rgba(255,255,255,0.05);
+  border: 0.5px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  padding: 7px 10px;
+  color: #e2e2eb;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.t-input:focus {
+  border-color: rgba(137,206,255,0.4);
+}
+
+.t-btn-primary {
+  background: linear-gradient(135deg, #2563eb, #14b8a6);
+  border: none;
+  color: white;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.t-btn-primary:hover { opacity: 0.88; }
+
+.t-btn-ghost {
+  background: rgba(37,99,235,0.1);
+  border: 0.5px solid rgba(37,99,235,0.3);
+  color: #89ceff;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.t-btn-ghost:hover { background: rgba(37,99,235,0.18); }

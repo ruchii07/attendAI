@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>AttendAI</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <!-- Decorative Background Blobs -->
   <div style="position:fixed;top:-200px;left:-200px;width:600px;
@@ -39,10 +43,10 @@
 
         <div class="role-card teacher-card" onclick="selectRole('teacher')">
           <div class="card-icon-wrap">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none"
-              stroke="#89ceff" stroke-width="1.5" stroke-linecap="round">
-              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-              <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#89ceff" stroke-width="1.5"
+              stroke-linecap="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z" />
+              <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
             </svg>
           </div>
           <h3 class="card-role">Teacher</h3>
@@ -54,10 +58,10 @@
 
         <div class="role-card student-card" onclick="selectRole('student')">
           <div class="card-icon-wrap">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none"
-              stroke="#ddb7ff" stroke-width="1.5" stroke-linecap="round">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ddb7ff" stroke-width="1.5"
+              stroke-linecap="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+              <path d="M6 12v5c3 3 9 3 12 0v-5" />
             </svg>
           </div>
           <h3 class="card-role">Student</h3>
@@ -89,10 +93,13 @@
           <input type="text" id="loginName" placeholder="Enter your full name">
           <input type="password" id="loginPassword" placeholder="Enter password">
           <button onclick="handleLogin()">Login</button>
-          <div id="teacherSignupLink" style="display:none; margin-top:1.2rem; text-align:center; font-size:0.85rem; color:rgba(194,198,214,0.6);">
-            First time? <a href="teacher-register.html" style="color:#2563eb; text-decoration:none; font-weight:600;">Sign Up Here</a>
+          <div id="teacherSignupLink"
+            style="display:none; margin-top:1.2rem; text-align:center; font-size:0.85rem; color:rgba(194,198,214,0.6);">
+            First time? <a href="teacher-register.html"
+              style="color:#2563eb; text-decoration:none; font-weight:600;">Sign Up Here</a>
           </div>
-          <div id="loginErrorMsg" style="display:none; color:#ffb347; padding:0.75rem 1rem; border-radius:8px; background:rgba(255,179,71,0.08); margin-top:1rem; font-size:0.9rem; text-align:center;">
+          <div id="loginErrorMsg"
+            style="display:none; color:#ffb347; padding:0.75rem 1rem; border-radius:8px; background:rgba(255,179,71,0.08); margin-top:1rem; font-size:0.9rem; text-align:center;">
             User not found.
           </div>
         </div>
@@ -100,144 +107,329 @@
     </div>
 
     <!-- 3. TEACHER DASHBOARD VIEW -->
-    <div id="teacher-dashboard" style="display:none;">
-      <div style="padding: 1rem 3rem;">
-         <button class="back-btn" onclick="logout()">← Logout</button>
-      </div>
-      <!-- Top Section: Teacher Profile -->
-      <div class="teacher-hero-card">
-        <!-- Avatar Box -->
-        <div class="teacher-avatar-circle" id="teacher-avatar">T</div>
+    <div id="teacher-dashboard" style="display:none; height:100vh; flex-direction:row;">
 
-        <!-- Info Box -->
-        <div class="teacher-info-content">
-          <div class="teacher-profile-header">
-            <div>
-              <div class="teacher-role-label">FACULTY MEMBER</div>
-              <h1 id="teacher-profile-name" class="teacher-name-title">—</h1>
-              <p id="teacher-profile-subject" class="teacher-subject-subtitle">—</p>
+      <!-- Sidebar -->
+      <div class="t-sidebar">
+        <div class="t-logo">⭐ AttendAI</div>
+
+        <div class="t-nav-section-label">MAIN</div>
+        <div class="t-nav-item" data-tab="overview" onclick="showTeacherTab('overview')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+          </svg>
+          Overview
+        </div>
+        <div class="t-nav-item" data-tab="students" onclick="showTeacherTab('students')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+          Students
+        </div>
+        <div class="t-nav-item" data-tab="schedule" onclick="showTeacherTab('schedule')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Schedule
+        </div>
+        <div class="t-nav-item" data-tab="reports" onclick="showTeacherTab('reports')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
+          Reports
+        </div>
+
+        <div class="t-nav-section-label">BIOMETRIC</div>
+        <div class="t-nav-item" data-tab="attendance" onclick="showTeacherTab('attendance')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+            <circle cx="12" cy="13" r="4" />
+          </svg>
+          Start Attendance
+        </div>
+
+        <div class="t-nav-section-label">ACCOUNT</div>
+        <div class="t-nav-item" data-tab="profile" onclick="showTeacherTab('profile')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          My Profile
+        </div>
+        <div class="t-nav-item" onclick="logout()" style="margin-top:auto;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          Logout
+        </div>
+      </div>
+
+      <!-- Main Area -->
+      <div class="t-main">
+        <!-- Top Bar -->
+        <div class="t-topbar">
+          <span id="t-topbar-title"
+            style="font-size:15px;font-weight:500;color:#e2e2eb;font-family:'Syne',sans-serif;">Overview</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span id="t-topbar-name"
+              style="font-size:13px;color:rgba(255,255,255,0.5);font-family:'DM Mono',monospace;"></span>
+            <div id="t-topbar-avatar" class="t-avatar-sm"></div>
+          </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="t-content">
+
+          <!-- Tab: Overview -->
+          <div id="t-tab-overview" class="t-section">
+            <!-- Profile Summary Card -->
+            <div class="t-card" style="display:flex;gap:1.5rem;align-items:center;margin-bottom:1.5rem;">
+              <div id="teacher-avatar" class="t-avatar-lg">T</div>
+              <div style="flex:1;">
+                <div
+                  style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">
+                  FACULTY MEMBER</div>
+                <div id="teacher-profile-name"
+                  style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#e2e2eb;margin-bottom:2px;">
+                  —</div>
+                <div id="teacher-profile-subject"
+                  style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:10px;">—</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <div class="t-pill"><span style="color:rgba(255,255,255,0.4);">EMP ID:</span> <strong
+                      id="teacher-pill-empid" style="color:rgba(255,255,255,0.8);">—</strong></div>
+                  <div class="t-pill"><span style="color:rgba(255,255,255,0.4);">SUBJECT:</span> <strong
+                      id="teacher-pill-subject" style="color:rgba(255,255,255,0.8);">—</strong></div>
+                  <div class="t-pill"><span style="color:rgba(255,255,255,0.4);">DEPT:</span> <strong
+                      id="teacher-pill-dept" style="color:rgba(255,255,255,0.8);">—</strong></div>
+                </div>
+              </div>
+              <button class="t-btn-ghost" onclick="showTeacherTab('profile')">Edit Profile</button>
             </div>
-            <div class="teacher-edit-wrapper">
-              <button class="teacher-edit-btn" onclick="toggleEditProfile()">Edit Profile</button>
+
+            <!-- 4-Stat Grid -->
+            <div class="t-stat-grid" style="margin-bottom:1.5rem;">
+              <div class="t-stat-card" style="border-left-color:#c0c1ff;">
+                <div id="teacher-stat-students" class="t-stat-num">0</div>
+                <div class="t-stat-label">REGISTERED STUDENTS</div>
+              </div>
+              <div class="t-stat-card" style="border-left-color:#ddb7ff;">
+                <div id="teacher-stat-attendance" class="t-stat-num">0</div>
+                <div class="t-stat-label">ATTENDANCE RECORDS</div>
+              </div>
+              <div class="t-stat-card" style="border-left-color:#89ceff;">
+                <div id="teacher-stat-rate" class="t-stat-num">0%</div>
+                <div class="t-stat-label">AVG RATE</div>
+              </div>
+              <div class="t-stat-card" style="border-left-color:#6ee7b7;">
+                <input type="number" id="totalClassesInput" value="1" min="1" onchange="updateTotalClasses()"
+                  title="Click to edit total classes" class="t-stat-input">
+                <div class="t-stat-label">TOTAL HELD</div>
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem;">
+              <div class="t-action-card" onclick="goRegister()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c0c1ff" stroke-width="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="8.5" cy="7" r="4" />
+                  <line x1="20" y1="8" x2="20" y2="14" />
+                  <line x1="23" y1="11" x2="17" y2="11" />
+                </svg>
+                <div class="t-action-title">Register Student</div>
+                <div class="t-action-sub">Add new student</div>
+              </div>
+              <div class="t-action-card" onclick="showTeacherTab('attendance')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#89ceff" stroke-width="2">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                  <circle cx="12" cy="13" r="4" />
+                </svg>
+                <div class="t-action-title">Start Attendance</div>
+                <div class="t-action-sub">Mark biometric</div>
+              </div>
+              <div class="t-action-card" onclick="showTeacherTab('reports')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2">
+                  <line x1="18" y1="20" x2="18" y2="10" />
+                  <line x1="12" y1="20" x2="12" y2="4" />
+                  <line x1="6" y1="20" x2="6" y2="14" />
+                </svg>
+                <div class="t-action-title">View Reports</div>
+                <div class="t-action-sub">Attendance logs</div>
+              </div>
+              <div class="t-action-card" onclick="showTeacherTab('schedule')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ddb7ff" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                <div class="t-action-title">Manage Schedule</div>
+                <div class="t-action-sub">Time slots</div>
+              </div>
+            </div>
+
+            <!-- Today's Schedule Mini-Table -->
+            <div class="t-card">
+              <div
+                style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;">
+                TODAY'S SCHEDULE</div>
+              <div id="todayScheduleContent"></div>
             </div>
           </div>
 
-          <div class="teacher-stat-pills">
-             <div class="stat-pill"><span class="pill-label">EMP ID:</span> <strong id="teacher-pill-empid">—</strong></div>
-             <div class="stat-pill"><span class="pill-label">SUBJECT:</span> <strong id="teacher-pill-subject">—</strong></div>
-             <div class="stat-pill"><span class="pill-label">DEPT:</span> <strong id="teacher-pill-dept">—</strong></div>
+          <!-- Tab: Students -->
+          <div id="t-tab-students" class="t-section" style="display:none;">
+            <div class="t-card">
+              <div id="teacherNoStudentsCard"
+                style="text-align:center;padding:2rem;color:rgba(255,255,255,0.4);font-family:'DM Mono',monospace;font-size:13px;">
+                No students registered yet</div>
+              <div id="teacherStudentTable" style="display:none;"></div>
+            </div>
           </div>
 
-          <!-- Inline Edit Form -->
-          <div id="edit-profile-form" class="edit-profile-form" style="display: none;">
-             <div style="margin-bottom: 1rem;">
-                <label>SUBJECT</label>
-                <input type="text" id="edit-subject" placeholder="e.g. Advanced Mathematics">
-             </div>
-             <div style="margin-bottom: 1rem;">
-                <label>DEPARTMENT</label>
-                <input type="text" id="edit-dept" placeholder="e.g. Science Dept">
-             </div>
-             <div style="margin-bottom: 1rem;">
-                <label>EMPLOYEE ID</label>
-                <input type="text" id="edit-empid" placeholder="e.g. EMP-1234">
-             </div>
-             <div class="form-actions">
-                <button class="cancel-btn" onclick="toggleEditProfile()">Cancel</button>
-                <button class="save-btn" onclick="saveTeacherProfile()">Save Changes</button>
-             </div>
+          <!-- Tab: Schedule -->
+          <div id="t-tab-schedule" class="t-section" style="display:none;">
+            <!-- Add Slot Form -->
+            <div class="t-card" style="margin-bottom:1.5rem;">
+              <div
+                style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;">
+                ADD CLASS SLOT</div>
+              <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px;align-items:end;">
+                <div>
+                  <label class="t-label">Subject</label>
+                  <input type="text" id="slot-subject" placeholder="e.g. Maths" class="t-input">
+                </div>
+                <div>
+                  <label class="t-label">Day</label>
+                  <select id="slot-day" class="t-input">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="t-label">Start</label>
+                  <input type="time" id="slot-start" class="t-input">
+                </div>
+                <div>
+                  <label class="t-label">End</label>
+                  <input type="time" id="slot-end" class="t-input">
+                </div>
+                <button class="t-btn-primary" onclick="addScheduleSlot()" style="height:36px;">Add</button>
+              </div>
+            </div>
+            <!-- Weekly Grid -->
+            <div id="scheduleWeeklyGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;"></div>
+            <div id="noScheduleCard"
+              style="display:none;text-align:center;padding:2rem;color:rgba(255,255,255,0.4);font-family:'DM Mono',monospace;font-size:13px;">
+              No classes scheduled yet.</div>
+            <div id="scheduleTableWrapper" style="display:none;"></div>
           </div>
-        </div>
-      </div>
 
-      <!-- Stats Grid -->
-      <div class="teacher-stats-grid">
-        <div class="grid-card card1">
-          <h3 id="teacher-stat-students">0</h3>
-          <p>STUDENTS</p>
-        </div>
-        <div class="grid-card card2">
-          <h3 id="teacher-stat-attendance">0</h3>
-          <p>ATTENDANCE</p>
-        </div>
-        <div class="grid-card card3">
-          <h3 id="teacher-stat-rate">0.0%</h3>
-          <p>AVG RATE</p>
-        </div>
-        <div class="grid-card card4">
-          <input type="number" id="totalClassesInput" value="1" min="1" onchange="updateTotalClasses()" title="Change total classes held">
-          <p>TOTAL HELD</p>
-        </div>
-      </div>
-
-      <div class="quick-actions">
-        <h2>Quick Actions</h2>
-        <div class="buttons">
-          <button onclick="goRegister()">Register Student</button>
-          <button onclick="goAttendance()">Start Attendance</button>
-          <button onclick="goReport()">Attendance Report</button>
-        </div>
-      </div>
-
-      <!-- Class Schedule Manager -->
-      <div class="schedule-section">
-        <div class="schedule-header">
-          <h2>Class Schedule</h2>
-          <p style="font-size: 0.85rem; color: rgba(226,226,235,0.5);">Manage your daily time slots</p>
-        </div>
-
-        <div class="add-slot-form">
-          <div class="form-group">
-            <label>Subject</label>
-            <input type="text" id="slot-subject" placeholder="e.g. Maths">
+          <!-- Tab: Reports -->
+          <div id="t-tab-reports" class="t-section" style="display:none;">
+            <div class="t-card">
+              <div id="reportsTableContent"></div>
+            </div>
           </div>
-          <div class="form-group">
-            <label>Day</label>
-            <select id="slot-day">
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
-              <option value="Saturday">Saturday</option>
-              <option value="Sunday">Sunday</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Start</label>
-            <input type="time" id="slot-start">
-          </div>
-          <div class="form-group">
-            <label>End</label>
-            <input type="time" id="slot-end">
-          </div>
-          <div class="btn-group">
-            <button onclick="addScheduleSlot()">Add Slot</button>
-          </div>
-        </div>
 
-        <div id="noScheduleCard" class="card" style="text-align:center; padding: 2rem;">
-          <p style="margin-bottom:0; color: rgba(255,255,255,0.5);">No classes scheduled yet.</p>
-        </div>
-        <div id="scheduleTableWrapper" style="display:none; overflow-x:auto;">
-          <!-- JS fills this -->
-        </div>
-      </div>
+          <!-- Tab: Attendance -->
+          <div id="t-tab-attendance" class="t-section" style="display:none;">
+            <div id="activeSlotBanner"
+              style="margin-bottom:1.5rem;padding:12px 16px;border-radius:10px;font-family:'DM Mono',monospace;font-size:13px;">
+            </div>
+            <div style="max-width:460px;">
+              <div class="t-biometric-card" onclick="window.location.href='attendance.html'">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#89ceff" stroke-width="1.5">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                  <circle cx="12" cy="13" r="4" />
+                </svg>
+                <div class="t-biometric-title">Face Recognition</div>
+                <div class="t-biometric-sub">Mark attendance using AI facial recognition</div>
+              </div>
+            </div>
+          </div>
 
-      <!-- Bug 3 Fix: Registered Students Table -->
-      <div class="page-wrapper" style="padding-top: 0;">
-        <h2 class="page-title" style="font-size: 1.2rem; margin-top: 2rem;">Registered Students</h2>
-        <div id="teacherNoStudentsCard" class="card" style="max-width:360px; margin:0 auto; text-align:center;">
-          <p style="margin-bottom:0;">No students registered yet</p>
+          <!-- Tab: My Profile -->
+          <div id="t-tab-profile" class="t-section" style="display:none;">
+            <div class="t-card">
+              <div style="display:flex;gap:1.5rem;align-items:center;margin-bottom:1.5rem;">
+                <!-- Clickable Avatar -->
+                <div style="position:relative;flex-shrink:0;">
+                  <div id="t-profile-avatar" class="t-avatar-lg"
+                    onclick="document.getElementById('teacherPhotoInput').click()"
+                    style="cursor:pointer;overflow:hidden;position:relative;"
+                    onmouseover="document.getElementById('t-avatar-overlay').style.opacity=1"
+                    onmouseout="document.getElementById('t-avatar-overlay').style.opacity=0">
+                    T
+                    <div id="t-avatar-overlay"
+                      style="position:absolute;inset:0;background:rgba(0,0,0,0.6);color:white;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;border-radius:50%;">
+                      📷</div>
+                  </div>
+                  <input type="file" id="teacherPhotoInput" accept="image/*" style="display:none;"
+                    onchange="handleTeacherPhotoUpload(event)">
+                  <div id="t-remove-photo"
+                    style="position:absolute;bottom:-20px;width:100%;text-align:center;display:none;">
+                    <a href="#" onclick="removeTeacherPhoto(event)"
+                      style="color:#ffb347;font-size:10px;text-decoration:none;font-family:'DM Mono',monospace;">✕
+                      Remove</a>
+                  </div>
+                </div>
+                <div>
+                  <div id="t-profile-name"
+                    style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#e2e2eb;">—</div>
+                  <div style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.4);">FACULTY
+                    MEMBER</div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+                <div>
+                  <label class="t-label">EMPLOYEE ID</label>
+                  <input type="text" id="edit-empid" placeholder="e.g. EMP-1234" class="t-input" style="width:100%;">
+                </div>
+                <div>
+                  <label class="t-label">SUBJECT</label>
+                  <input type="text" id="edit-subject" placeholder="e.g. Advanced Mathematics" class="t-input"
+                    style="width:100%;">
+                </div>
+                <div>
+                  <label class="t-label">DEPARTMENT</label>
+                  <input type="text" id="edit-dept" placeholder="e.g. Science Dept" class="t-input" style="width:100%;">
+                </div>
+                <div>
+                  <label class="t-label">TOTAL CLASSES HELD</label>
+                  <input type="number" id="edit-totalclasses" min="1" placeholder="e.g. 30" class="t-input"
+                    style="width:100%;">
+                </div>
+              </div>
+              <button class="t-btn-primary" onclick="saveTeacherProfile()">Save Changes</button>
+            </div>
+          </div>
+
         </div>
-        <div id="teacherStudentTable" style="display:none; overflow-x:auto;"></div>
       </div>
     </div>
 
     <!-- 4. STUDENT DASHBOARD VIEW -->
     <div id="student-dashboard" style="display:none; padding: 2rem 4rem;">
       <div style="margin-bottom: 2rem;">
-         <button class="back-btn" onclick="logout()">← Logout</button>
+        <button class="back-btn" onclick="logout()">← Logout</button>
       </div>
 
       <!-- Top Section -->
@@ -245,29 +437,41 @@
         <!-- Avatar Box -->
         <div class="student-avatar-box" style="position: relative;">
           <!-- Clickable Avatar Area -->
-          <div class="student-avatar-placeholder" id="student-avatar-display" onclick="document.getElementById('studentPhotoInput').click()" style="cursor: pointer; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; border-radius: 20px; overflow: hidden;" onmouseover="this.querySelector('.avatar-hover-overlay').style.opacity=1" onmouseout="this.querySelector('.avatar-hover-overlay').style.opacity=0">
-             <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1.5" id="student-avatar-svg">
-               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-               <circle cx="12" cy="7" r="4"></circle>
-             </svg>
-             <!-- Hover Overlay -->
-             <div class="avatar-hover-overlay" style="position: absolute; inset: 0; background: rgba(0,0,0,0.6); color: white; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.9rem;">
-                Change Photo
-             </div>
+          <div class="student-avatar-placeholder" id="student-avatar-display"
+            onclick="document.getElementById('studentPhotoInput').click()"
+            style="cursor: pointer; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; border-radius: 20px; overflow: hidden;"
+            onmouseover="this.querySelector('.avatar-hover-overlay').style.opacity=1"
+            onmouseout="this.querySelector('.avatar-hover-overlay').style.opacity=0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1.5"
+              id="student-avatar-svg">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <!-- Hover Overlay -->
+            <div class="avatar-hover-overlay"
+              style="position: absolute; inset: 0; background: rgba(0,0,0,0.6); color: white; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.9rem;">
+              Change Photo
+            </div>
           </div>
 
-          <input type="file" id="studentPhotoInput" accept="image/*" style="display: none;" onchange="handleStudentPhotoUpload(event)">
+          <input type="file" id="studentPhotoInput" accept="image/*" style="display: none;"
+            onchange="handleStudentPhotoUpload(event)">
 
-          <div class="student-badge-icon" style="background: linear-gradient(135deg, #2563eb, #14b8a6); border-radius: 50%; width: 28px; height: 28px; right: -8px; bottom: 12px; position: absolute; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(37,99,235,0.3); pointer-events: none; z-index: 2;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <div class="student-badge-icon"
+            style="background: linear-gradient(135deg, #2563eb, #14b8a6); border-radius: 50%; width: 28px; height: 28px; right: -8px; bottom: 12px; position: absolute; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(37,99,235,0.3); pointer-events: none; z-index: 2;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
               <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
               <circle cx="12" cy="13" r="4"></circle>
             </svg>
           </div>
-          
+
           <!-- Remove Link -->
-          <div id="removePhotoLink" style="position: absolute; bottom: -28px; width: 100%; text-align: center; display: none;">
-             <a href="#" onclick="removeStudentPhoto(event)" style="color: #ffb347; font-size: 0.8rem; text-decoration: none; font-family: 'DM Mono', monospace;">✕ Remove</a>
+          <div id="removePhotoLink"
+            style="position: absolute; bottom: -28px; width: 100%; text-align: center; display: none;">
+            <a href="#" onclick="removeStudentPhoto(event)"
+              style="color: #ffb347; font-size: 0.8rem; text-decoration: none; font-family: 'DM Mono', monospace;">✕
+              Remove</a>
           </div>
         </div>
 
@@ -291,11 +495,12 @@
           <div class="student-actions-row">
             <button class="student-action-btn primary" onclick="window.location.href='attendance.html'">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2a10 10 0 0 0-10 10c0 5 3 9 8 9.8V17a3 3 0 0 1-6 0V11a7 7 0 1 1 14 0v6a3 3 0 0 1-6 0v2"></path>
-              </svg> 
+                <path d="M12 2a10 10 0 0 0-10 10c0 5 3 9 8 9.8V17a3 3 0 0 1-6 0V11a7 7 0 1 1 14 0v6a3 3 0 0 1-6 0v2">
+                </path>
+              </svg>
               Mark My Attendance
             </button>
-            <button class="student-action-btn secondary">
+            <button class="student-action-btn secondary" onclick="showStudentSchedule()">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                 <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -317,22 +522,44 @@
           </div>
           <a href="report.html" class="view-logs-link">View Full Logs →</a>
         </div>
-        
+
         <div id="studentNoRecordsCard" class="student-report-table-wrapper" style="text-align:center; padding: 2rem;">
           <p style="color: rgba(255,255,255,0.4); margin: 0;">No attendance records found.</p>
         </div>
-        
+
         <div id="studentReportTable" class="student-report-table-wrapper" style="display:none; overflow-x:auto;">
           <!-- JS fills this -->
+        </div>
+      </div>
+
+      <!-- Schedule Section (hidden by default) -->
+      <div id="student-schedule-section" style="display:none; margin-top:2rem;">
+        <div class="history-header">
+          <div>
+            <h2>Class Schedule</h2>
+            <p>Your weekly timetable</p>
+          </div>
+          <button class="back-btn" onclick="hideStudentSchedule()" style="margin:0;">Close</button>
+        </div>
+        <div class="t-card" style="margin-top:1rem; border:1px solid rgba(255,255,255,0.05); background:rgba(255,255,255,0.02)">
+          <div id="studentScheduleWeeklyGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="toastNotification" style="position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: rgba(20,184,166,0.15); border: 1px solid rgba(20,184,166,0.3); color: #14b8a6; padding: 0.6rem 1.4rem; border-radius: 10px; font-family: 'DM Mono', monospace; font-size: 0.82rem; z-index: 999; pointer-events: none; opacity: 0; transition: opacity 0.3s;">
+  <div id="toastNotification"
+    style="position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: rgba(20,184,166,0.15); border: 1px solid rgba(20,184,166,0.3); color: #14b8a6; padding: 0.6rem 1.4rem; border-radius: 10px; font-family: 'DM Mono', monospace; font-size: 0.82rem; z-index: 999; pointer-events: none; opacity: 0; transition: opacity 0.3s;">
     ✓ Profile photo updated
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const _supabase = supabase.createClient(
+      "https://ygxrmeugswqykhxlfjkl.supabase.co",
+      "sb_publishable_ZpXluIMDi4ebS-9MkIFAsA_Sr_imexZ"
+    )
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/face-api.js/dist/face-api.min.js"></script>
   <script src="faceRecognition.js"></script>
   <script src="fingerprint.js"></script>
@@ -345,8 +572,15 @@
       document.getElementById("login-section").style.display = "none";
       document.getElementById("teacher-dashboard").style.display = "none";
       document.getElementById("student-dashboard").style.display = "none";
-      
-      document.getElementById(viewId).style.display = "block";
+
+      const el = document.getElementById(viewId);
+      if (viewId === 'teacher-dashboard') {
+        el.style.display = 'flex';
+        document.querySelector('.navbar').style.display = 'none';
+      } else {
+        el.style.display = 'block';
+        document.querySelector('.navbar').style.display = '';
+      }
     }
 
     function selectRole(role) {
@@ -355,68 +589,114 @@
       document.getElementById("loginName").value = "";
       document.getElementById("loginPassword").value = "";
       document.getElementById("loginErrorMsg").style.display = "none";
-      
+
       // Show sign-up link for teachers only
       document.getElementById("teacherSignupLink").style.display = role === 'teacher' ? "block" : "none";
-      
+
       showView('login-section');
     }
 
-    function handleLogin() {
+    async function handleLogin() {
       const nameInput = document.getElementById("loginName").value.trim();
       const passwordInput = document.getElementById("loginPassword").value.trim();
       const errorMsg = document.getElementById("loginErrorMsg");
-      
+      errorMsg.style.display = "none";
+
       if (!nameInput || !passwordInput) {
         errorMsg.textContent = "Please enter name and password.";
         errorMsg.style.display = "block";
         return;
       }
 
-      const students = JSON.parse(localStorage.getItem("students")) || [];
-      const attendance = JSON.parse(localStorage.getItem("attendance")) || [];
-
       if (currentRole === 'teacher') {
-        const teachers = JSON.parse(localStorage.getItem("teachers")) || [];
-        const teacher = teachers.find(t => t.name.toLowerCase() === nameInput.toLowerCase() && t.password === passwordInput);
-        
-        if (teacher || (nameInput.toLowerCase() === 'admin' && passwordInput === 'admin123')) {
-          localStorage.setItem("currentUser", teacher ? teacher.name : "Admin");
-          localStorage.setItem("currentRole", "teacher");
-          showView('teacher-dashboard');
-          loadTeacherDashboard();
-        } else {
+        const email = nameInput.toLowerCase().replace(/\s/g, '') + "@attendai.app";
+
+        const { data, error } = await _supabase.auth.signInWithPassword({
+          email: email,
+          password: passwordInput
+        });
+
+        if (error) {
           errorMsg.textContent = "Invalid credentials. If first time, please Sign Up.";
           errorMsg.style.display = "block";
+          return;
         }
-      } else {
-        // Student login: validate name and password
-        const student = students.find(s => s.name.toLowerCase() === nameInput.toLowerCase() && s.password === passwordInput);
-        if (student) {
-          // Set currentUser and currentRole in localStorage
-          localStorage.setItem("currentUser", student.name);
-          localStorage.setItem("currentRole", "student");
 
-          showView('student-dashboard');
-          loadStudentDashboard(student, attendance);
-        } else {
-          errorMsg.textContent = "Invalid name or password.";
+        // Fetch teacher profile
+        const { data: teacher, error: teacherError } = await _supabase
+          .from("teachers")
+          .select("*")
+          .eq("user_id", data.user.id)
+          .maybeSingle();
+
+        if (teacherError) {
+          errorMsg.textContent = "Database error: " + teacherError.message;
           errorMsg.style.display = "block";
+          return;
         }
+
+        if (!teacher) {
+          // Clear stale cache so old deleted data doesn't persist
+          localStorage.removeItem("teachers_cache");
+          errorMsg.textContent = "⚠ User not found. Account may have been deleted.";
+          errorMsg.style.display = "block";
+          return;
+        }
+
+        localStorage.setItem("currentUser", teacher.name);
+        localStorage.setItem("currentRole", "teacher");
+        localStorage.setItem("teacherDbId", teacher.id);
+
+        showView('teacher-dashboard');
+        loadTeacherDashboard();
+      } else {
+        // STUDENT LOGIN — fetch all matching rows, pick first
+        // NOTE: using .maybeSingle() would crash if duplicate names exist in DB
+        const { data: rows, error: studentError } = await _supabase
+          .from("students")
+          .select("*")
+          .ilike("name", nameInput);
+
+        if (studentError) {
+          errorMsg.textContent = "Database error: " + studentError.message;
+          errorMsg.style.display = "block";
+          return;
+        }
+
+        if (!rows || rows.length === 0) {
+          errorMsg.textContent = "⚠ Student not found. Please register first.";
+          errorMsg.style.display = "block";
+          return;
+        }
+
+        // Find first row where password matches
+        const student = rows.find(r => r.password === passwordInput);
+
+        if (!student) {
+          errorMsg.textContent = "Incorrect password.";
+          errorMsg.style.display = "block";
+          return;
+        }
+
+        // ✅ Valid student — load dashboard
+        localStorage.setItem("currentUser", student.name);
+        localStorage.setItem("currentRole", "student");
+        localStorage.setItem("studentDbId", student.id);
+
+        showView('student-dashboard');
+        loadStudentDashboard(student);
       }
     }
 
-    function logout() {
-      currentRole = "";
-      localStorage.removeItem("currentUser");
-      localStorage.removeItem("currentRole");
-      document.getElementById("loginName").value = "";
-      document.getElementById("loginPassword").value = "";
+    async function logout() {
+      await _supabase.auth.signOut();
+      localStorage.clear();
+      document.querySelector('.navbar').style.display = '';
       showView('role-selection');
     }
 
     // ── Student Dashboard Loader ─────────────────
-    function loadStudentDashboard(student, attendance) {
+    async function loadStudentDashboard(student) {
       document.getElementById("profile-name").textContent = student.name;
       document.getElementById("profile-roll").textContent = student.roll || "—";
       document.getElementById("profile-dept").textContent = student.dept || "—";
@@ -424,21 +704,24 @@
       const savedPhoto = localStorage.getItem("studentPhoto_" + student.name);
       updateAvatarUI(savedPhoto);
 
-      const myAttendance = attendance.filter(a => a.name.toLowerCase() === student.name.toLowerCase());
+      // Fetch attendance inside
+      const { data: attendance } = await _supabase
+        .from("attendance")
+        .select("*")
+        .eq("student_name", student.name);
+
+      const myAttendance = attendance || [];
       document.getElementById("profile-sessions").textContent = myAttendance.length + " Sessions";
 
       // Calculate attendance rate using manually set totalClasses
       const totalClasses = parseInt(localStorage.getItem("totalClassesHeld")) || 1;
       const rate = ((myAttendance.length / totalClasses) * 100).toFixed(1);
-      
-      // We'll reuse the sessions card to show rate too if needed, or just keep sessions count. 
-      // The mockup showed "142 Sessions" in that spot.
-      
+
       // Populate attendance history table
       if (myAttendance.length > 0) {
         document.getElementById("studentNoRecordsCard").style.display = "none";
         document.getElementById("studentReportTable").style.display = "block";
-        
+
         let html = `<table class="student-history-table">
           <thead>
             <tr>
@@ -449,12 +732,16 @@
             </tr>
           </thead>
           <tbody>`;
-        
+
         // Sort by time descending
-        myAttendance.sort((a,b) => new Date(b.time) - new Date(a.time)).forEach(record => {
-          let d = new Date(record.time);
-          let dateStr = d.toLocaleDateString(undefined, { month: 'numeric', day: 'numeric', year: 'numeric' });
-          let timeStr = d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true });
+        myAttendance.sort((a, b) => new Date(b.marked_at || "2026-01-01") - new Date(a.marked_at || "2026-01-01")).forEach(record => {
+          let dateStr = "Today";
+          let timeStr = record.start_time || "—";
+          if (record.marked_at) {
+             let d = new Date(record.marked_at);
+             dateStr = d.toLocaleDateString(undefined, { month: 'numeric', day: 'numeric', year: 'numeric' });
+             timeStr = d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true });
+          }
 
           html += `<tr>
             <td><strong>${dateStr}</strong><br><span>${timeStr}</span></td>
@@ -471,6 +758,53 @@
       }
     }
 
+    async function showStudentSchedule() {
+      document.querySelector('.student-history-section').style.display = 'none';
+      document.getElementById('student-schedule-section').style.display = 'block';
+
+      const studentId = localStorage.getItem("studentDbId");
+      if (!studentId) return;
+
+      const { data: stu } = await _supabase.from("students").select("teacher_id").eq("id", studentId).single();
+      if (!stu || !stu.teacher_id) return;
+
+      const { data: schedule } = await _supabase.from("schedule").select("*").eq("teacher_id", stu.teacher_id);
+      
+      const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+      const grid = document.getElementById('studentScheduleWeeklyGrid');
+      
+      if (!schedule || schedule.length === 0) {
+          grid.innerHTML = "<div style='grid-column: 1 / -1; text-align:center; padding: 2rem; color: rgba(255,255,255,0.4); font-family: DM Mono, monospace; font-size: 13px;'>No classes scheduled yet.<br><br>If classes were added by the teacher, ensure your Supabase RLS policies allow SELECT on the schedule table.</div>";
+          return;
+      }
+
+      const colors = ['rgba(37,99,235,0.12)', 'rgba(20,184,166,0.12)', 'rgba(192,193,255,0.1)', 'rgba(221,183,255,0.1)'];
+      const borderColors = ['rgba(37,99,235,0.25)', 'rgba(20,184,166,0.25)', 'rgba(192,193,255,0.2)', 'rgba(221,183,255,0.2)'];
+      const textColors = ['#89ceff', '#14b8a6', '#c0c1ff', '#ddb7ff'];
+      const subjectColors = {}; let colorIdx = 0;
+      
+      grid.innerHTML = days.map(day => {
+        const slots = schedule.filter(s => s.day === day);
+        const slotsHtml = slots.length ? slots.map(s => {
+          if (!(s.subject in subjectColors)) subjectColors[s.subject] = colorIdx++ % colors.length;
+          const ci = subjectColors[s.subject];
+          // Strip seconds if present for clean UI display
+          const displayStart = s.start_time.substring(0, 5); 
+          const displayEnd = s.end_time.substring(0, 5);
+          return `<div style="background:${colors[ci]};border:0.5px solid ${borderColors[ci]};border-radius:6px;padding:6px 8px;margin-bottom:6px;">
+            <div style="color:${textColors[ci]};font-size:11px;font-weight:700;font-family:'DM Mono',monospace;">${s.subject}</div>
+            <div style="color:rgba(255,255,255,0.4);font-size:10px;font-family:'DM Mono',monospace;">${displayStart} – ${displayEnd}</div>
+          </div>`;
+        }).join('') : `<div style="border:1px dashed rgba(255,255,255,0.08);border-radius:6px;padding:16px 8px;text-align:center;color:rgba(255,255,255,0.2);font-size:11px;font-family:'DM Mono',monospace;">— free —</div>`;
+        return `<div><div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:0.08em;margin-bottom:8px;text-transform:uppercase;">${day.substring(0, 3)}</div>${slotsHtml}</div>`;
+      }).join('');
+    }
+
+    function hideStudentSchedule() {
+      document.querySelector('.student-history-section').style.display = 'block';
+      document.getElementById('student-schedule-section').style.display = 'none';
+    }
+
     // ── Teacher Dashboard Loader ─────────────────
     function getInitials(name) {
       if (!name) return "T";
@@ -482,42 +816,236 @@
     }
 
     function toggleEditProfile() {
-      const form = document.getElementById("edit-profile-form");
-      if (form.style.display === "none" || form.style.display === "") {
-        form.style.display = "block";
-        const currentUser = localStorage.getItem("currentUser");
-        const teachers = JSON.parse(localStorage.getItem("teachers")) || [];
-        const teacher = teachers.find(t => t.name.toLowerCase() === currentUser.toLowerCase());
-        if (teacher) {
-           document.getElementById("edit-subject").value = teacher.subject || "";
-           document.getElementById("edit-dept").value = teacher.dept || "";
-           document.getElementById("edit-empid").value = teacher.employeeId || "";
+      // Redirect to profile tab in the new sidebar layout
+      showTeacherTab('profile');
+    }
+
+    function showTeacherTab(name) {
+      document.querySelectorAll('.t-section').forEach(s => s.style.display = 'none');
+      const tab = document.getElementById('t-tab-' + name);
+      if (tab) tab.style.display = 'block';
+      document.querySelectorAll('.t-nav-item').forEach(n => n.classList.remove('active'));
+      const navItem = document.querySelector('[data-tab="' + name + '"]');
+      if (navItem) navItem.classList.add('active');
+      const titles = { overview: 'Overview', students: 'Students', schedule: 'Schedule', reports: 'Reports', attendance: 'Start Attendance', profile: 'My Profile' };
+      document.getElementById('t-topbar-title').textContent = titles[name] || '';
+
+      // Lazy render for specific tabs
+      if (name === 'students') renderStudentsTab();
+      if (name === 'reports') renderReportsTab();
+      if (name === 'attendance') renderAttendanceBanner();
+      if (name === 'profile') renderProfileTab();
+      if (name === 'schedule') renderScheduleWeekly();
+    }
+
+    function renderStudentsTab() {
+      const students = window._dashboardData?.students || [];
+      const attendance = window._dashboardData?.attendance || [];
+      const totalClasses = parseInt(localStorage.getItem('totalClassesHeld')) || 1;
+      const noCard = document.getElementById('teacherNoStudentsCard');
+      const tableEl = document.getElementById('teacherStudentTable');
+      if (students.length === 0) {
+        noCard.style.display = 'block'; tableEl.style.display = 'none'; return;
+      }
+      noCard.style.display = 'none'; tableEl.style.display = 'block';
+      let html = `<table class="report-table"><thead><tr><th>Name</th><th>Roll No.</th><th>Department</th><th>Attendance %</th><th>Action</th></tr></thead><tbody>`;
+      students.forEach(s => {
+        const sa = attendance.filter(a => (a.student_name || '').toLowerCase() === s.name.toLowerCase());
+        const rate = ((sa.length / totalClasses) * 100).toFixed(1);
+        const isGood = parseFloat(rate) >= 75;
+        const badge = `<span style="background:${isGood ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)'};color:${isGood ? '#22c55e' : '#ef4444'};padding:2px 8px;border-radius:6px;font-size:11px;font-family:'DM Mono',monospace;">${rate}%</span>`;
+        html += `<tr><td>${s.name || '—'}</td><td>${s.roll || '—'}</td><td>${s.dept || '—'}</td><td>${badge}</td><td><button onclick="confirmDeleteStudent('${s.name}')" style="background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.2);padding:4px 10px;border-radius:6px;cursor:pointer;font-size:0.8rem;">Delete</button></td></tr>`;
+      });
+      html += '</tbody></table>';
+      tableEl.innerHTML = html;
+    }
+
+    function renderReportsTab() {
+      const attendance = window._dashboardData?.attendance || [];
+      const el = document.getElementById('reportsTableContent');
+      if (attendance.length === 0) {
+        el.innerHTML = '<div style="text-align:center;padding:2rem;color:rgba(255,255,255,0.4);font-family:\'DM Mono\',monospace;font-size:13px;">No attendance records yet.</div>';
+        return;
+      }
+      const sorted = [...attendance].sort((a, b) => new Date(b.marked_at || "2026-01-01") - new Date(a.marked_at || "2026-01-01"));
+      let html = `<table class="report-table"><thead><tr><th>Student</th><th>Class</th><th>Date</th><th>Time</th><th>Method</th><th>Status</th></tr></thead><tbody>`;
+      sorted.forEach(r => {
+        let dateStr = "Today";
+        let timeStr = r.start_time || "—";
+        if (r.marked_at) {
+           const d = new Date(r.marked_at);
+           dateStr = d.toLocaleDateString();
+           timeStr = d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
         }
+        html += `<tr><td>${r.name || '—'}</td><td>${r.subject || '—'}</td><td>${dateStr}</td><td>${timeStr}</td><td><span style="color:rgba(255,255,255,0.5);font-size:12px;">👁 Face</span></td><td><span class="status-present">● Present</span></td></tr>`;
+      });
+      html += '</tbody></table>';
+      el.innerHTML = html;
+    }
+
+    function renderAttendanceBanner() {
+      const schedule = window._dashboardData?.schedule || [];
+      const banner = document.getElementById('activeSlotBanner');
+      const dayStr = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+      const now = new Date();
+      const cur = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+      const active = schedule.find(s => {
+        const st = s.start_time ? s.start_time.substring(0, 5) : '00:00';
+        const et = s.end_time ? s.end_time.substring(0, 5) : '23:59';
+        return s.day === dayStr && cur >= st && cur <= et;
+      });
+      if (active) {
+        banner.style.background = 'rgba(37,99,235,0.12)';
+        banner.style.border = '0.5px solid rgba(137,206,255,0.25)';
+        banner.style.color = '#89ceff';
+        const activeStart = active.start_time ? active.start_time.substring(0, 5) : '';
+        const activeEnd = active.end_time ? active.end_time.substring(0, 5) : '';
+        banner.textContent = `Active slot: ${active.subject} — ${activeStart} to ${activeEnd}`;
       } else {
-        form.style.display = "none";
+        banner.style.background = 'rgba(255,179,71,0.08)';
+        banner.style.border = '0.5px solid rgba(255,179,71,0.2)';
+        banner.style.color = '#ffb347';
+        banner.textContent = 'No active class right now.';
       }
     }
 
-    function saveTeacherProfile() {
-       const currentUser = localStorage.getItem("currentUser");
-       let teachers = JSON.parse(localStorage.getItem("teachers")) || [];
-       let teacherIndex = teachers.findIndex(t => t.name.toLowerCase() === currentUser.toLowerCase());
-       
-       if (teacherIndex !== -1) {
-          teachers[teacherIndex].subject = document.getElementById("edit-subject").value.trim();
-          teachers[teacherIndex].dept = document.getElementById("edit-dept").value.trim();
-          teachers[teacherIndex].employeeId = document.getElementById("edit-empid").value.trim();
-          localStorage.setItem("teachers", JSON.stringify(teachers));
-          loadTeacherDashboard();
-          toggleEditProfile();
-       }
+    function renderProfileTab() {
+      const currentUser = localStorage.getItem('currentUser') || '';
+      const teacher = window._dashboardData?.teacher;
+      document.getElementById('t-profile-name').textContent = currentUser;
+      if (teacher) {
+        document.getElementById('edit-subject').value = teacher.subject || '';
+        document.getElementById('edit-dept').value = teacher.dept || '';
+        document.getElementById('edit-empid').value = teacher.employeeId || '';
+      }
+      const totalClasses = parseInt(localStorage.getItem('totalClassesHeld')) || 1;
+      document.getElementById('edit-totalclasses').value = totalClasses;
+      // Load saved photo
+      const savedPhoto = localStorage.getItem('teacherPhoto_' + currentUser);
+      updateTeacherAvatarUI(savedPhoto, currentUser);
     }
 
-    function addScheduleSlot() {
+    function updateTeacherAvatarUI(photoData, name) {
+      const avatarEl = document.getElementById('t-profile-avatar');
+      const removeLink = document.getElementById('t-remove-photo');
+      const overlay = document.getElementById('t-avatar-overlay');
+      let imgEl = document.getElementById('t-profile-img');
+      if (photoData) {
+        if (!imgEl) {
+          imgEl = document.createElement('img');
+          imgEl.id = 't-profile-img';
+          imgEl.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0;';
+          avatarEl.insertBefore(imgEl, overlay);
+        }
+        imgEl.src = photoData;
+        avatarEl.childNodes[0].nodeValue = ''; // clear initials text node
+        if (removeLink) removeLink.style.display = 'block';
+      } else {
+        if (imgEl) imgEl.remove();
+        avatarEl.childNodes[0].nodeValue = getInitials(name || 'T');
+        if (removeLink) removeLink.style.display = 'none';
+      }
+    }
+
+    function handleTeacherPhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          const size = 200;
+          canvas.width = size; canvas.height = size;
+          const scale = Math.max(size / img.width, size / img.height);
+          const sw = img.width * scale, sh = img.height * scale;
+          ctx.drawImage(img, (size - sw) / 2, (size - sh) / 2, sw, sh);
+          const base64 = canvas.toDataURL('image/jpeg', 0.85);
+          const currentUser = localStorage.getItem('currentUser');
+          if (currentUser) {
+            localStorage.setItem('teacherPhoto_' + currentUser, base64);
+            updateTeacherAvatarUI(base64, currentUser);
+            // Also update sidebar topbar avatar
+            const topAvatar = document.getElementById('t-topbar-avatar');
+            if (topAvatar) { topAvatar.style.backgroundImage = `url(${base64})`; topAvatar.style.backgroundSize = 'cover'; topAvatar.textContent = ''; }
+            showToast('✓ Profile photo updated');
+          }
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+      event.target.value = '';
+    }
+
+    function removeTeacherPhoto(event) {
+      event.preventDefault();
+      const currentUser = localStorage.getItem('currentUser');
+      if (currentUser) {
+        localStorage.removeItem('teacherPhoto_' + currentUser);
+        updateTeacherAvatarUI(null, currentUser);
+        const topAvatar = document.getElementById('t-topbar-avatar');
+        if (topAvatar) { topAvatar.style.backgroundImage = ''; topAvatar.textContent = getInitials(currentUser); }
+        showToast('✓ Photo removed');
+      }
+    }
+
+    function renderScheduleWeekly() {
+      const schedule = window._dashboardData?.schedule || [];
+      const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+      const grid = document.getElementById('scheduleWeeklyGrid');
+      const colors = ['rgba(37,99,235,0.12)', 'rgba(20,184,166,0.12)', 'rgba(192,193,255,0.1)', 'rgba(221,183,255,0.1)'];
+      const borderColors = ['rgba(37,99,235,0.25)', 'rgba(20,184,166,0.25)', 'rgba(192,193,255,0.2)', 'rgba(221,183,255,0.2)'];
+      const textColors = ['#89ceff', '#14b8a6', '#c0c1ff', '#ddb7ff'];
+      // Track color index per subject name for consistent coloring
+      const subjectColors = {}; let colorIdx = 0;
+      grid.innerHTML = days.map(day => {
+        const slots = schedule.filter(s => s.day === day);
+        const slotsHtml = slots.length ? slots.map(s => {
+          if (!(s.subject in subjectColors)) subjectColors[s.subject] = colorIdx++ % colors.length;
+          const ci = subjectColors[s.subject];
+          const displayStart = s.start_time ? s.start_time.substring(0, 5) : "";
+          const displayEnd = s.end_time ? s.end_time.substring(0, 5) : "";
+          return `<div style="background:${colors[ci]};border:0.5px solid ${borderColors[ci]};border-radius:6px;padding:6px 8px;margin-bottom:6px;">
+            <div style="color:${textColors[ci]};font-size:11px;font-weight:700;font-family:'DM Mono',monospace;">${s.subject}</div>
+            <div style="color:rgba(255,255,255,0.4);font-size:10px;font-family:'DM Mono',monospace;">${displayStart} – ${displayEnd}</div>
+            <button onclick="deleteScheduleSlot('${s.id}')" style="background:none;border:none;color:rgba(239,68,68,0.6);cursor:pointer;font-size:10px;padding:0;margin-top:2px;">✕ remove</button>
+          </div>`;
+        }).join('') : `<div style="border:1px dashed rgba(255,255,255,0.08);border-radius:6px;padding:16px 8px;text-align:center;color:rgba(255,255,255,0.2);font-size:11px;font-family:'DM Mono',monospace;">— free —</div>`;
+        return `<div><div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:0.08em;margin-bottom:8px;text-transform:uppercase;">${day.substring(0, 3)}</div>${slotsHtml}</div>`;
+      }).join('');
+    }
+
+    async function saveTeacherProfile() {
+      const teacherId = localStorage.getItem("teacherDbId");
+
+      const subject = document.getElementById("edit-subject").value.trim();
+      const dept = document.getElementById("edit-dept").value.trim();
+      const employeeId = document.getElementById("edit-empid").value.trim();
+
+      const { error } = await _supabase.from("teachers").update({
+        subject: subject,
+        department: dept,
+        employee_id: employeeId
+      }).eq("id", teacherId);
+
+      const totalClassesVal = document.getElementById("edit-totalclasses").value;
+      if (totalClassesVal) localStorage.setItem("totalClassesHeld", totalClassesVal);
+
+      if (!error) {
+        loadTeacherDashboard();
+        showToast("✓ Profile updated");
+      } else {
+        showToast("Error updating profile");
+      }
+    }
+
+    async function addScheduleSlot() {
       const subject = document.getElementById("slot-subject").value.trim();
       const day = document.getElementById("slot-day").value;
       const start = document.getElementById("slot-start").value;
       const end = document.getElementById("slot-end").value;
+      const teacherId = localStorage.getItem("teacherDbId");
 
       if (!subject || !day || !start || !end) {
         alert("Please fill all fields to add a slot.");
@@ -525,53 +1053,64 @@
       }
 
       if (start >= end) {
-         alert("End time must be after start time.");
-         return;
+        alert("End time must be after start time.");
+        return;
       }
 
-      const schedule = JSON.parse(localStorage.getItem("schedule")) || [];
       const newSlot = {
-        id: Date.now().toString(),
+        teacher_id: teacherId,
         subject: subject,
         day: day,
-        start: start,
-        end: end
+        start_time: start,
+        end_time: end
       };
 
-      schedule.push(newSlot);
-      // Sort by day then time
-      const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-      schedule.sort((a, b) => {
-         if (a.day !== b.day) return days.indexOf(a.day) - days.indexOf(b.day);
-         return a.start.localeCompare(b.start);
-      });
+      const { error } = await _supabase.from("schedule").insert(newSlot);
 
-      localStorage.setItem("schedule", JSON.stringify(schedule));
-      
-      // Clear inputs
-      document.getElementById("slot-subject").value = "";
-      document.getElementById("slot-start").value = "";
-      document.getElementById("slot-end").value = "";
-      
-      loadScheduleTable();
+      if (!error) {
+        // Clear inputs
+        document.getElementById("slot-subject").value = "";
+        document.getElementById("slot-start").value = "";
+        document.getElementById("slot-end").value = "";
+        loadTeacherDashboard();
+      } else {
+        alert("Failed to add slot: " + error.message);
+      }
     }
 
-    function deleteScheduleSlot(id) {
-       if(confirm("Delete this schedule slot?")) {
-          let schedule = JSON.parse(localStorage.getItem("schedule")) || [];
-          schedule = schedule.filter(s => s.id !== String(id));
-          localStorage.setItem("schedule", JSON.stringify(schedule));
-          loadScheduleTable();
-       }
+    async function deleteScheduleSlot(id) {
+      if (confirm("Delete this schedule slot?")) {
+        const { error } = await _supabase.from("schedule").delete().eq("id", id);
+        if (!error) {
+          loadTeacherDashboard();
+        } else {
+          alert("Failed to delete slot. Ensure your Supabase RLS policies allow DELETE on the schedule table.");
+        }
+      }
     }
+    window.deleteScheduleSlot = deleteScheduleSlot;
+
+    async function confirmDeleteStudent(studentName) {
+      if (confirm(`Delete student ${studentName}?`)) {
+        const { error } = await _supabase.from("students").delete().eq("name", studentName);
+        if (!error) {
+          loadTeacherDashboard();
+          showToast("Student deleted");
+        } else {
+          alert("Failed to delete student. Ensure your Supabase RLS policies allow DELETE on the students table.");
+        }
+      }
+    }
+    window.confirmDeleteStudent = confirmDeleteStudent;
+
 
     function loadScheduleTable() {
-       const schedule = JSON.parse(localStorage.getItem("schedule")) || [];
-       if (schedule.length > 0) {
-          document.getElementById("noScheduleCard").style.display = "none";
-          document.getElementById("scheduleTableWrapper").style.display = "block";
-          
-          let html = `<table class="report-table">
+      const schedule = window._dashboardData?.schedule || [];
+      if (schedule.length > 0) {
+        document.getElementById("noScheduleCard").style.display = "none";
+        document.getElementById("scheduleTableWrapper").style.display = "block";
+
+        let html = `<table class="report-table">
             <thead>
               <tr>
                 <th>Subject</th>
@@ -581,101 +1120,143 @@
               </tr>
             </thead>
             <tbody>`;
-            
-          schedule.forEach(slot => {
-             // Convert 24h to 12h format for display
-             const formatTime = (time24) => {
-               let [h, m] = time24.split(":");
-               let ampm = h >= 12 ? 'PM' : 'AM';
-               h = h % 12 || 12;
-               return `${h}:${m} ${ampm}`;
-             };
-             
-             html += `<tr>
+
+        schedule.forEach(slot => {
+          // Convert 24h to 12h format for display
+          const formatTime = (time24) => {
+            let [h, m] = time24.split(":");
+            let ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12 || 12;
+            return `${h}:${m} ${ampm}`;
+          };
+
+          html += `<tr>
                <td><strong>${slot.subject}</strong></td>
                <td>${slot.day}</td>
-               <td>${formatTime(slot.start)} - ${formatTime(slot.end)}</td>
+               <td>${formatTime(slot.start_time)} - ${formatTime(slot.end_time)}</td>
                <td><button onclick="deleteScheduleSlot('${slot.id}')" style="background:rgba(239, 68, 68, 0.1); color:#ef4444; border:1px solid rgba(239, 68, 68, 0.2); padding:4px 10px; border-radius:6px; cursor:pointer; font-size:0.8rem;">Delete</button></td>
              </tr>`;
-          });
-          html += `</tbody></table>`;
-          document.getElementById("scheduleTableWrapper").innerHTML = html;
-       } else {
-          document.getElementById("noScheduleCard").style.display = "block";
-          document.getElementById("scheduleTableWrapper").style.display = "none";
-       }
+        });
+        html += `</tbody></table>`;
+        document.getElementById("scheduleTableWrapper").innerHTML = html;
+      } else {
+        document.getElementById("noScheduleCard").style.display = "block";
+        document.getElementById("scheduleTableWrapper").style.display = "none";
+      }
     }
 
-    function loadTeacherDashboard() {
-      const currentUser = localStorage.getItem("currentUser") || "Teacher";
-      
-      const teachers = JSON.parse(localStorage.getItem("teachers")) || [];
-      const teacher = teachers.find(t => t.name.toLowerCase() === currentUser.toLowerCase());
+    async function loadTeacherDashboard() {
+      // Step 1: Wait for auth session
+      const { data: { session } } = await _supabase.auth.getSession();
+      if (!session?.user?.id) return; // Guard clause
+
+      // Step 2: Fetch teacher using the auth user ID
+      const { data: teacher } = await _supabase
+        .from('teachers')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .single();
+
+      if (!teacher) return; // Guard before dependent queries
+
+      // Keep localStorage synced for external pages
+      localStorage.setItem("currentUser", teacher.name);
+      localStorage.setItem("teacherDbId", teacher.id);
+
+      const currentUser = teacher.name;
+
+      // Step 3: Fetch dependent data using the resolved teacher.id
+      const [{ data: students }, { data: attendance }, { data: schedule }] = await Promise.all([
+        _supabase.from("students").select("*").eq("teacher_id", teacher.id),
+        _supabase.from("attendance").select("*").eq("teacher_id", teacher.id),
+        _supabase.from("schedule").select("*").eq("teacher_id", teacher.id)
+      ]);
+
+      window._dashboardData = { teacher, students, attendance, schedule };
 
       // Update Profile UI
       document.getElementById("teacher-profile-name").textContent = currentUser;
       document.getElementById("teacher-avatar").textContent = getInitials(currentUser);
-      
+
       if (teacher) {
-        const deptText = teacher.dept ? teacher.dept : "No Department Set";
-        const subjectText = teacher.subject ? teacher.subject : "No Subject Set";
-        document.getElementById("teacher-profile-subject").textContent = `${subjectText} • ${deptText}`;
-        document.getElementById("teacher-pill-empid").textContent = teacher.employeeId || "—";
+        document.getElementById("teacher-profile-subject").textContent = `${teacher.subject || "No Subject"} • ${teacher.department || "No Dept"}`;
+        document.getElementById("teacher-pill-empid").textContent = teacher.employee_id || "—";
         document.getElementById("teacher-pill-subject").textContent = teacher.subject || "—";
-        document.getElementById("teacher-pill-dept").textContent = teacher.dept || "—";
-      } else {
-        document.getElementById("teacher-profile-subject").textContent = "—";
-        document.getElementById("teacher-pill-empid").textContent = "Admin";
-        document.getElementById("teacher-pill-subject").textContent = "—";
-        document.getElementById("teacher-pill-dept").textContent = "—";
+        document.getElementById("teacher-pill-dept").textContent = teacher.department || "—";
       }
 
-      const students = JSON.parse(localStorage.getItem("students")) || [];
-      const attendance = JSON.parse(localStorage.getItem("attendance")) || [];
       const totalClasses = parseInt(localStorage.getItem("totalClassesHeld")) || 1;
-      
       document.getElementById("totalClassesInput").value = totalClasses;
 
       // Update stat cards
-      document.getElementById("teacher-stat-students").textContent = students.length;
-      document.getElementById("teacher-stat-attendance").textContent = attendance.length;
+      document.getElementById("teacher-stat-students").textContent = students?.length || 0;
+      document.getElementById("teacher-stat-attendance").textContent = attendance?.length || 0;
 
-      // Calculate average attendance rate across all students
       let totalRateSum = 0;
-      students.forEach(s => {
-        const studentAttendance = attendance.filter(a => a.name.toLowerCase() === s.name.toLowerCase());
-        const studentRate = (studentAttendance.length / totalClasses) * 100;
-        totalRateSum += studentRate;
+      (students || []).forEach(s => {
+        const count = (attendance || []).filter(a => a.student_name?.toLowerCase() === s.name?.toLowerCase()).length;
+        totalRateSum += (count / totalClasses) * 100;
       });
-      
-      const avgRate = students.length > 0 ? (totalRateSum / students.length).toFixed(1) + "%" : "0%";
+      const avgRate = students?.length > 0 ? (totalRateSum / students.length).toFixed(1) + "%" : "0%";
       document.getElementById("teacher-stat-rate").textContent = avgRate;
 
-      // Populate registered students table
-      if (students.length > 0) {
-        document.getElementById("teacherNoStudentsCard").style.display = "none";
-        document.getElementById("teacherStudentTable").style.display = "block";
-        let html = `<table class="report-table"><thead><tr><th>Name</th><th>Roll No.</th><th>Dept</th><th>Rate %</th><th>Action</th></tr></thead><tbody>`;
-        students.forEach(s => {
-          const studentAttendance = attendance.filter(a => a.name.toLowerCase() === s.name.toLowerCase());
-          const studentRate = ((studentAttendance.length / totalClasses) * 100).toFixed(1);
-          
-          html += `<tr>
-            <td>${s.name || "—"}</td>
-            <td>${s.roll || "—"}</td>
-            <td>${s.dept || "—"}</td>
-            <td><strong>${studentRate}%</strong></td>
-            <td><button onclick="confirmDeleteStudent('${s.name}')" style="background:rgba(239, 68, 68, 0.1); color:#ef4444; border:1px solid rgba(239, 68, 68, 0.2); padding:4px 10px; border-radius:6px; cursor:pointer; font-size:0.8rem;">Delete</button></td>
-          </tr>`;
-        });
-        html += "</tbody></table>";
-        document.getElementById("teacherStudentTable").innerHTML = html;
-      } else {
-        document.getElementById("teacherNoStudentsCard").style.display = "block";
-        document.getElementById("teacherStudentTable").style.display = "none";
+      loadScheduleTable();
+      renderTodaySchedule();
+
+      // Update topbar: name + avatar photo
+      const topName = document.getElementById('t-topbar-name');
+      const topAvatar = document.getElementById('t-topbar-avatar');
+      if (topName) topName.textContent = currentUser;
+      const savedPhoto = localStorage.getItem('teacherPhoto_' + currentUser);
+      if (topAvatar) {
+        if (savedPhoto) {
+          topAvatar.style.backgroundImage = `url(${savedPhoto})`; topAvatar.style.backgroundSize = 'cover'; topAvatar.textContent = '';
+        } else {
+          topAvatar.style.backgroundImage = ''; topAvatar.textContent = getInitials(currentUser);
+        }
+      }
+      const heroAvatar = document.getElementById('teacher-avatar');
+      if (heroAvatar) {
+        if (savedPhoto) {
+          heroAvatar.style.backgroundImage = `url(${savedPhoto})`; heroAvatar.style.backgroundSize = 'cover'; heroAvatar.textContent = '';
+        } else {
+          heroAvatar.style.backgroundImage = ''; heroAvatar.textContent = getInitials(currentUser);
+        }
       }
 
-      loadScheduleTable();
+      showTeacherTab('overview');
+    }
+
+
+    function renderTodaySchedule() {
+      const schedule = window._dashboardData?.schedule || [];
+      const content = document.getElementById('todayScheduleContent');
+      if (!content) return;
+      const dayStr = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+      const today = schedule.filter(s => s.day === dayStr);
+      if (today.length === 0) {
+        content.innerHTML = '<div style="color:rgba(255,255,255,0.3);font-family:\'DM Mono\',monospace;font-size:12px;">No classes scheduled today.</div>';
+        return;
+      }
+      const now = new Date();
+      const cur = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+      let html = '';
+      today.forEach(s => {
+        const st = s.start_time ? s.start_time.substring(0, 5) : '00:00';
+        const et = s.end_time ? s.end_time.substring(0, 5) : '23:59';
+        const isActive = cur >= st && cur <= et;
+        const badge = isActive
+          ? '<span style="background:rgba(34,197,94,0.12);color:#22c55e;padding:2px 8px;border-radius:6px;font-size:10px;font-family:\'DM Mono\',monospace;">Active now</span>'
+          : '<span style="color:rgba(255,255,255,0.3);font-size:10px;font-family:\'DM Mono\',monospace;">Upcoming</span>';
+        html += `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid rgba(255,255,255,0.04);">
+          <div style="font-size:13px;color:#e2e2eb;font-family:'Syne',sans-serif;font-weight:600;">${s.subject}</div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.4);">${st} – ${et}</span>
+            ${badge}
+          </div>
+        </div>`;
+      });
+      content.innerHTML = html;
     }
 
     function updateTotalClasses() {
@@ -684,14 +1265,16 @@
       loadTeacherDashboard();
     }
 
+    function goReport() { showTeacherTab('reports'); }
+
     function handleStudentPhotoUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
 
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         const img = new Image();
-        img.onload = function() {
+        img.onload = function () {
           const canvas = document.createElement("canvas");
           const ctx = canvas.getContext("2d");
           const targetSize = 200;
@@ -706,9 +1289,9 @@
           const y = (targetSize - scaledHeight) / 2;
 
           ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
-          
+
           const base64Jpeg = canvas.toDataURL("image/jpeg", 0.85);
-          
+
           const currentUser = localStorage.getItem("currentUser");
           if (currentUser) {
             localStorage.setItem("studentPhoto_" + currentUser, base64Jpeg);
@@ -719,7 +1302,7 @@
         img.src = e.target.result;
       };
       reader.readAsDataURL(file);
-      
+
       // Reset input so same file can be selected again
       event.target.value = "";
     }
@@ -737,16 +1320,16 @@
     function updateAvatarUI(photoData) {
       const display = document.getElementById("student-avatar-display");
       const overlayText = display.querySelector(".avatar-hover-overlay");
-      
+
       let imgEl = document.getElementById("student-profile-img");
-      
+
       if (photoData) {
         if (!imgEl) {
           imgEl = document.createElement("img");
           imgEl.id = "student-profile-img";
           // Instruction requested border-radius: 50% on img
           imgEl.style.cssText = "width: 100%; height: 100%; object-fit: cover; border-radius: 50%;";
-          
+
           // hide svg
           document.getElementById("student-avatar-svg").style.display = "none";
           // insert image before overlay
@@ -765,7 +1348,7 @@
 
     function showToast(msg) {
       const toast = document.getElementById("toastNotification");
-      if(!toast) return;
+      if (!toast) return;
       toast.textContent = msg;
       toast.style.opacity = "1";
       setTimeout(() => {
@@ -773,21 +1356,20 @@
       }, 2500);
     }
 
-    function confirmDeleteStudent(name) {
+    async function confirmDeleteStudent(name) {
       if (confirm(`Are you sure you want to delete student "${name}"? This will completely remove their profile, attendance history, and biometric data.`)) {
-        const targetName = String(name).trim().toLowerCase();
-        
-        // Remove from students
-        let students = JSON.parse(localStorage.getItem("students")) || [];
-        students = students.filter(s => String(s.name).trim().toLowerCase() !== targetName);
-        localStorage.setItem("students", JSON.stringify(students));
-        
-        // Remove from attendance records
-        let attendance = JSON.parse(localStorage.getItem("attendance")) || [];
-        attendance = attendance.filter(a => String(a.name).trim().toLowerCase() !== targetName);
-        localStorage.setItem("attendance", JSON.stringify(attendance));
-        
-        loadTeacherDashboard();
+        const student = window._dashboardData?.students.find(s => s.name === name);
+        if (student) {
+          const [res1, res2] = await Promise.all([
+            _supabase.from("attendance").delete().eq("student_name", name),
+            _supabase.from("students").delete().eq("id", student.id)
+          ]);
+          if (res2.error || res1.error) {
+             alert("Database Error: Cannot delete student. Ensure your Supabase RLS policies allow DELETE operations on 'students' and 'attendance' tables.");
+          } else {
+             loadTeacherDashboard();
+          }
+        }
       }
     }
 
@@ -803,31 +1385,35 @@
       setTimeout(() => { el.style.display = "none"; }, 4000);
     }
 
-    // ── Bug 6 Fix: Restore session from hash on page load ────
-    (function restoreSession() {
-      const hash = window.location.hash; // e.g. #teacher or #student
+    async function restoreSession() {
       const savedRole = localStorage.getItem("currentRole");
-      const savedUser = localStorage.getItem("currentUser");
 
-      if (savedRole && savedUser && (hash === '#teacher' || hash === '#student' || savedRole)) {
-        currentRole = savedRole;
-        if (savedRole === 'teacher') {
-          showView('teacher-dashboard');
-          loadTeacherDashboard();
-        } else if (savedRole === 'student') {
-          const students = JSON.parse(localStorage.getItem("students")) || [];
-          const attendance = JSON.parse(localStorage.getItem("attendance")) || [];
-          const student = students.find(s => s.name.toLowerCase() === savedUser.toLowerCase());
-          if (student) {
-            showView('student-dashboard');
-            loadStudentDashboard(student, attendance);
-          }
+      if (savedRole === "student") {
+        const studentId = localStorage.getItem("studentDbId");
+        if (!studentId) return;
+
+        const { data: student, error } = await _supabase
+          .from("students").select("*").eq("id", studentId).single();
+
+        if (student && !error) {
+          showView("student-dashboard");
+          loadStudentDashboard(student);
         }
+        return;
       }
-      // Clean hash from URL
-      if (hash) history.replaceState(null, '', window.location.pathname);
-    })();
+
+      // Teacher logic requires Auth Session
+      const { data: { session } } = await _supabase.auth.getSession();
+      if (!session) return;
+
+      if (savedRole === "teacher") {
+        showView("teacher-dashboard");
+        loadTeacherDashboard();
+      }
+    }
+    restoreSession();
   </script>
   <script src="mist.js"></script>
 </body>
+
 </html>

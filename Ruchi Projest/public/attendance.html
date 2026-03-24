@@ -34,7 +34,7 @@
     </div>
 
      <div class="action-buttons">
-       <button onclick="startFaceRecognition()">Start Face Scan</button>
+       <button onclick="checkAndStartFaceScan()">Start Face Scan</button>
        <button onclick="recognizeFace()">Run Recognition</button>
        <button id="markAttendanceBtn" onclick="confirmAttendance()" style="display:none; background: linear-gradient(135deg, #22c55e, #10b981);">Mark Attendance</button>
      </div>
@@ -43,6 +43,13 @@
 
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const _supabase = supabase.createClient(
+      "https://ygxrmeugswqykhxlfjkl.supabase.co",
+      "sb_publishable_ZpXluIMDi4ebS-9MkIFAsA_Sr_imexZ"
+    )
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/face-api.js/dist/face-api.min.js"></script>
   <script src="faceRecognition.js"></script>
   <script>
@@ -56,42 +63,78 @@
       }
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-      const students = JSON.parse(localStorage.getItem("students")) || [];
-      if (students.length === 0) {
-        document.getElementById("noStudentsCard").style.display = "block";
+    document.addEventListener("DOMContentLoaded", async function () {
+      const teacherId = localStorage.getItem("teacherDbId");
+      if (teacherId) {
+        const { data } = await _supabase.from("students").select("id").eq("teacher_id", teacherId);
+        if (!data || data.length === 0) {
+          document.getElementById("noStudentsCard").style.display = "block";
+        }
       }
 
       // Auto-fill student name from currentUser
       const currentUser = localStorage.getItem("currentUser");
       const currentRole = localStorage.getItem("currentRole");
       if (currentUser && currentRole === "student") {
-        const student = students.find(s => s.name.toLowerCase() === currentUser.toLowerCase());
-        if (student) {
-          document.getElementById("studentBanner").style.display = "block";
-          document.getElementById("studentBannerName").textContent = student.name;
-        }
+        document.getElementById("studentBanner").style.display = "block";
+        document.getElementById("studentBannerName").textContent = currentUser;
       }
     });
     
     // Part 3: Time-Slot Based Attendance Logic Overrides
     document.addEventListener("DOMContentLoaded", function () {
-       // Save original functions before overriding
-       const originalStartFaceRecognition = window.startFaceRecognition;
-       const originalConfirmAttendance = window.confirmAttendance;
-       
        let activeSlot = null; // Store the currently matching slot
 
-       window.startFaceRecognition = async function() {
-          const schedule = JSON.parse(localStorage.getItem("schedule")) || [];
+       window.checkAndStartFaceScan = async function() {
+          let teacherId = localStorage.getItem("teacherDbId");
+          const currentRole = localStorage.getItem("currentRole");
+
+          if (currentRole === "student") {
+             const studentId = localStorage.getItem("studentDbId");
+             if (studentId) {
+                 const { data: stu, error: stuErr } = await _supabase.from("students").select("teacher_id").eq("id", studentId).single();
+                 if (stuErr) {
+                    const statusEl = document.getElementById("attendanceStatus");
+                    if (statusEl) {
+                       statusEl.textContent = "❌ Database Error fetching student: " + stuErr.message;
+                       statusEl.style.display = "block";
+                       statusEl.style.color = "#ffb347";
+                    }
+                    return;
+                 }
+                 if (stu) teacherId = stu.teacher_id;
+             }
+          }
+
+          if (!teacherId) {
+             const statusEl = document.getElementById("attendanceStatus");
+             if (statusEl) {
+                statusEl.textContent = "❌ Subject teacher profile not found. Cannot determine active class.";
+                statusEl.style.display = "block";
+                statusEl.style.color = "#ffb347";
+             }
+             return;
+          }
           
-          if (schedule.length === 0) {
+          const { data: schedule, error: schedErr } = await _supabase.from("schedule").select("*").eq("teacher_id", teacherId);
+          
+          if (schedErr) {
+             const statusEl = document.getElementById("attendanceStatus");
+             if (statusEl) {
+                statusEl.textContent = "❌ Database Error checking schedule: " + schedErr.message;
+                statusEl.style.display = "block";
+                statusEl.style.color = "#ffb347";
+             }
+             return;
+          }
+          
+          if (!schedule || schedule.length === 0) {
              const proceed = confirm("No classes are scheduled. Proceed anyway? (For testing purposes)");
              if(!proceed) return;
              
              // Fake a slot for testing if they proceed
              activeSlot = { subject: "Unscheduled Class", id: "0000" };
-             if(originalStartFaceRecognition) originalStartFaceRecognition();
+             if(window.startFaceRecognition) window.startFaceRecognition();
              return;
           }
 
@@ -100,7 +143,9 @@
           const currentTimeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
 
           activeSlot = schedule.find(slot => {
-             return slot.day === currentDayStr && currentTimeStr >= slot.start && currentTimeStr <= slot.end;
+             const st = slot.start_time ? slot.start_time.substring(0, 5) : "00:00";
+             const et = slot.end_time ? slot.end_time.substring(0, 5) : "23:59";
+             return slot.day === currentDayStr && currentTimeStr >= st && currentTimeStr <= et;
           });
 
           if (!activeSlot) {
@@ -115,9 +160,9 @@
              return; // Block execution
           }
 
-          // Active class found, proceed with original tracking
-          if(originalStartFaceRecognition) {
-             originalStartFaceRecognition();
+          // Active class found, proceed with tracking
+          if(window.startFaceRecognition) {
+             window.startFaceRecognition();
              const statusEl = document.getElementById("attendanceStatus");
              if(statusEl) {
                 statusEl.textContent = `⏳ Loading models... Active class: ${activeSlot.subject}`;
@@ -125,36 +170,42 @@
           }
        };
 
-       window.confirmAttendance = function() {
+       window.confirmAttendance = async function() {
           // Temporarily override to inject subject and slotId
           if (!matchedStudent) return; // matchedStudent is global from faceRecognition.js
           
-          let attendance = JSON.parse(localStorage.getItem("attendance")) || [];
-
+          const teacherId = localStorage.getItem("teacherDbId");
           const record = {
-            name: matchedStudent.name,
-            roll: matchedStudent.roll,
-            dept: matchedStudent.dept,
-            time: new Date().toLocaleString(),
+            student_name: matchedStudent.name,
+            teacher_id: teacherId,
+            marked_at: new Date().toISOString(),
             subject: activeSlot ? activeSlot.subject : "—",
-            slotId: activeSlot ? activeSlot.id : null
+            slot_id: activeSlot ? activeSlot.id : null
           };
 
-          attendance.push(record);
-          localStorage.setItem("attendance", JSON.stringify(attendance));
+          const { error } = await _supabase.from("attendance").insert(record);
           
           const statusEl = document.getElementById("attendanceStatus");
-          if(statusEl) {
-             statusEl.textContent = `✅ Attendance marked for ${matchedStudent.name} (${record.subject})`;
-             statusEl.style.display = "block";
-             statusEl.style.color = "#22c55e";
-             statusEl.style.background = "rgba(34,197,94,0.08)";
-             statusEl.style.borderColor = "rgba(34,197,94,0.2)";
+          if(error) {
+             if(statusEl) {
+                 statusEl.textContent = `❌ Failed to mark attendance: ${error.message}`;
+                 statusEl.style.display = "block";
+                 statusEl.style.color = "#ffb347";
+                 statusEl.style.background = "rgba(255,179,71,0.08)";
+                 statusEl.style.borderColor = "rgba(255,179,71,0.2)";
+             }
+          } else {
+             if(statusEl) {
+                 statusEl.textContent = `✅ Attendance marked for ${matchedStudent.name} (${record.subject})`;
+                 statusEl.style.display = "block";
+                 statusEl.style.color = "#22c55e";
+                 statusEl.style.background = "rgba(34,197,94,0.08)";
+                 statusEl.style.borderColor = "rgba(34,197,94,0.2)";
+             }
+             const btn = document.getElementById("markAttendanceBtn");
+             if (btn) btn.style.display = "none";
+             matchedStudent = null;
           }
-          
-          const btn = document.getElementById("markAttendanceBtn");
-          if (btn) btn.style.display = "none";
-          matchedStudent = null;
        };
     });
   </script>

@@ -5,7 +5,7 @@ const video = document.getElementById("video");
 if (!video) return; // No video element on this page — bail out safely
 
 // ── Start Face Recognition (load models + camera) ──────────
-let matchedStudent = null;
+window.matchedStudent = null;
 
 // Helper to show on-page status messages instead of alerts
 function showStatus(msg, type = "info") {
@@ -107,14 +107,20 @@ window.captureFace = async function () {
 // ── Recognize face and mark attendance ──────────────────────
 // Bug 1 Fix: Re-fetch full student object from localStorage so roll/dept are always present
 window.recognizeFace = async function () {
-  const students = JSON.parse(localStorage.getItem("students")) || [];
+  const teacherId = localStorage.getItem("teacherDbId");
+  if (!teacherId) {
+    showStatus("⚠️ Teacher not logged in", "error");
+    return;
+  }
+  
+  const { data: students, error } = await _supabase.from("students").select("name,roll,department,descriptor").eq("teacher_id", teacherId);
   const btn = document.getElementById("markAttendanceBtn");
   
   if (btn) btn.style.display = "none";
-  matchedStudent = null;
+  window.matchedStudent = null;
 
-  if (students.length === 0) {
-    showStatus("⚠️ No registered students", "error");
+  if (error || !students || students.length === 0) {
+    showStatus("⚠️ No registered students found in database", "error");
     return;
   }
 
@@ -136,9 +142,16 @@ window.recognizeFace = async function () {
 
   students.forEach(student => {
     if (!student.descriptor) return;
+    
+    // Convert descriptor array from Supabase JSONB back to Float32Array
+    let descArray = student.descriptor;
+    if (typeof descArray === 'string') {
+        try { descArray = JSON.parse(descArray); } catch(e) {}
+    }
+
     const distance = faceapi.euclideanDistance(
       faceDescriptor,
-      new Float32Array(student.descriptor)
+      new Float32Array(descArray)
     );
     if (distance < bestDistance) {
       bestDistance = distance;
@@ -147,11 +160,8 @@ window.recognizeFace = async function () {
   });
 
   if (bestMatch) {
-    // Re-fetch from localStorage to guarantee we have roll/dept
-    const freshStudents = JSON.parse(localStorage.getItem("students")) || [];
-    matchedStudent = freshStudents.find(s => s.name === bestMatch.name) || bestMatch;
-    
-    showStatus("✓ Face Recognized: " + matchedStudent.name, "success");
+    window.matchedStudent = bestMatch;
+    showStatus("✓ Face Recognized: " + window.matchedStudent.name, "success");
     if (btn) btn.style.display = "inline-block";
   } else {
     showStatus("❌ Face not recognized", "error");
@@ -159,26 +169,26 @@ window.recognizeFace = async function () {
 };
 
 // ── Confirm and Save attendance record ──────────────────────
-window.confirmAttendance = function() {
-  if (!matchedStudent) return;
+window.confirmAttendance = async function() {
+  if (!window.matchedStudent) return;
   
-  let attendance = JSON.parse(localStorage.getItem("attendance")) || [];
-
+  const teacherId = localStorage.getItem("teacherDbId");
   const record = {
-    name: matchedStudent.name,
-    roll: matchedStudent.roll,
-    dept: matchedStudent.dept,
-    time: new Date().toLocaleString()
+    student_name: window.matchedStudent.name,
+    teacher_id: teacherId,
+    marked_at: new Date().toISOString()
   };
 
-  attendance.push(record);
-  localStorage.setItem("attendance", JSON.stringify(attendance));
+  const { error } = await _supabase.from("attendance").insert(record);
   
-  showStatus("✅ Attendance marked for " + matchedStudent.name, "success");
-  
-  const btn = document.getElementById("markAttendanceBtn");
-  if (btn) btn.style.display = "none";
-  matchedStudent = null;
+  if (error) {
+     showStatus("❌ Failed to mark attendance: " + error.message, "error");
+  } else {
+     showStatus("✅ Attendance marked for " + window.matchedStudent.name, "success");
+     const btn = document.getElementById("markAttendanceBtn");
+     if (btn) btn.style.display = "none";
+     window.matchedStudent = null;
+  }
 }
 
 }); // end DOMContentLoaded

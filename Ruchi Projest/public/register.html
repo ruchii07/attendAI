@@ -31,6 +31,13 @@
       
       <div id="statusMsg" style="display:none; padding:0.75rem 1rem; border-radius:8px; margin-top:1rem; font-size:0.9rem; text-align:center;"></div>
       
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+      <script>
+        const _supabase = supabase.createClient(
+          "https://ygxrmeugswqykhxlfjkl.supabase.co",
+          "sb_publishable_ZpXluIMDi4ebS-9MkIFAsA_Sr_imexZ"
+        )
+      </script>
       <script src="https://cdn.jsdelivr.net/npm/face-api.js/dist/face-api.min.js"></script>
       <script>
         const video = document.getElementById("video");
@@ -81,10 +88,30 @@
           }
 
           const descriptor = Array.from(detection.descriptor);
+          const teacherId = localStorage.getItem("teacherDbId");
 
-          let students = JSON.parse(localStorage.getItem("students")) || [];
-          students.push({ name, roll, dept, password, descriptor, id: Date.now() });
-          localStorage.setItem("students", JSON.stringify(students));
+          if (!teacherId) {
+            showMsg("Error: No teacher logged in", "error");
+            registerBtn.textContent = "Register Student";
+            registerBtn.disabled = false;
+            return;
+          }
+
+          const { error } = await _supabase.from("students").insert({
+            teacher_id: teacherId,
+            name: name,
+            roll: roll,
+            department: dept,
+            password: password,
+            descriptor: descriptor
+          });
+
+          if (error) {
+            showMsg("⚠️ Failed to register student: " + error.message, "error");
+            registerBtn.textContent = "Register Student";
+            registerBtn.disabled = false;
+            return;
+          }
 
           showMsg("✓ Student registered successfully!", "success");
 

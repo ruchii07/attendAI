@@ -28,6 +28,13 @@
 
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const _supabase = supabase.createClient(
+      "https://ygxrmeugswqykhxlfjkl.supabase.co",
+      "sb_publishable_ZpXluIMDi4ebS-9MkIFAsA_Sr_imexZ"
+    )
+  </script>
   <script>
     // Bug 6 Fix: Back button preserves role context via hash
     function goBackToDashboard() {
@@ -39,10 +46,16 @@
       }
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-      const attendance = JSON.parse(localStorage.getItem("attendance")) || [];
+    document.addEventListener("DOMContentLoaded", async function () {
+      const teacherId = localStorage.getItem("teacherDbId");
+      if (!teacherId) return;
+      
+      const [{ data: attendance }, { data: students }] = await Promise.all([
+        _supabase.from("attendance").select("*").eq("teacher_id", teacherId).order("marked_at", { ascending: false }),
+        _supabase.from("students").select("name,roll,department").eq("teacher_id", teacherId)
+      ]);
 
-      if (attendance.length === 0) return;
+      if (!attendance || attendance.length === 0) return;
 
       document.getElementById("noRecordsCard").style.display = "none";
       document.getElementById("reportTable").style.display = "block";
@@ -54,6 +67,7 @@
               <th>Name</th>
               <th>Roll No.</th>
               <th>Department</th>
+              <th>Subject</th>
               <th>Time</th>
             </tr>
           </thead>
@@ -61,12 +75,18 @@
       `;
 
       attendance.forEach(function (record) {
+        const studentInfo = students ? students.find(s => s.name === record.student_name) : null;
+        const roll = studentInfo ? studentInfo.roll : "—";
+        const dept = studentInfo ? studentInfo.department : "—";
+        const d = new Date(record.marked_at);
+        
         html += `
           <tr>
-            <td>${record.name || "—"}</td>
-            <td>${record.roll || "—"}</td>
-            <td>${record.dept || "—"}</td>
-            <td>${record.time || "—"}</td>
+            <td>${record.student_name || "—"}</td>
+            <td>${roll}</td>
+            <td>${dept}</td>
+            <td>${record.subject || "—"}</td>
+            <td>${d.toLocaleString()}</td>
           </tr>
         `;
       });
