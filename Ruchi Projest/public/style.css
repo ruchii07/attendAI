@@ -1634,7 +1634,7 @@ video {
   .t-logo { margin-bottom: 0 !important; font-size: 1rem; padding: 0 0.5rem 0 0 !important; border-bottom: none !important; flex-shrink: 0; }
   .t-nav-section-label { display: none !important; }
   .t-nav-item { font-size: 11px; padding: 6px 10px !important; white-space: nowrap; flex-shrink: 0; }
-  .t-sidebar > div:last-child { display: none; } /* hide logout from sidebar on mobile */
+  .t-sidebar > div:last-child { margin-top: 0 !important; } /* reset desktop margin-top:auto */
 
   .t-main { padding: 1rem !important; min-height: auto !important; }
   .t-topbar { padding: 0.5rem 0 !important; margin-bottom: 0.8rem; }
