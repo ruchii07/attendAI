@@ -107,9 +107,19 @@ window.captureFace = async function () {
 // ── Recognize face and mark attendance ──────────────────────
 // Bug 1 Fix: Re-fetch full student object from localStorage so roll/dept are always present
 window.recognizeFace = async function () {
-  const teacherId = localStorage.getItem("teacherDbId");
+  let teacherId = localStorage.getItem("teacherDbId");
+
+  // If student is logged in, resolve teacherId from their student record
+  if (!teacherId && localStorage.getItem("currentRole") === "student") {
+    const studentId = localStorage.getItem("studentDbId");
+    if (studentId) {
+      const { data: stu } = await _supabase.from("students").select("teacher_id").eq("id", studentId).single();
+      if (stu) teacherId = stu.teacher_id;
+    }
+  }
+
   if (!teacherId) {
-    showStatus("⚠️ Teacher not logged in", "error");
+    showStatus("⚠️ No teacher profile linked. Please log in again.", "error");
     return;
   }
   
