@@ -1,33 +1,24 @@
-# Agent Memory — Mist Background Task
+# Agent Memory — Landing Page Redesign
 
-## Project Type
-Plain multi-page HTML project. No React. No Node. No build tools.
-Files that exist: index.html, register.html, attendance.html,
-report.html, script.js, faceRecognition.js, fingerprint.js,
-registerFace.js, style.css
+## What This Page Does
+index.html is the role-selection landing page for AttendAI.
+User sees two cards: Teacher and Student. Clicking a card
+navigates to the respective dashboard/flow.
 
 ## Your Only Job
-Add a WebGL animated mist background that renders behind all pages.
-Do this by creating ONE new file (mist.js) and making small targeted
-edits to existing files. Nothing else changes.
+Redesign ONLY the visual layout and styling of index.html
+and style.css for the landing page. The mist.js WebGL
+background is already working — do not touch it.
 
-## Hard Rules — Never Break These
-- DO NOT touch faceRecognition.js, registerFace.js, or fingerprint.js
-- DO NOT touch any JS functions, localStorage, or face-api logic
-- DO NOT change HTML structure, forms, buttons, or onclick handlers
-- DO NOT add any CDN links or external libraries
-- Output every modified file COMPLETELY — no partial snippets
+## Hard Rules
+- DO NOT remove or modify onclick handlers on the cards
+- DO NOT touch mist.js, faceRecognition.js, fingerprint.js
+- DO NOT change navigation logic or localStorage
+- DO NOT add new JS libraries
+- mist.js script tag must stay at bottom of body
+- Output full files — no partial snippets
 
 ## File Checklist
-[ ] MEMORY.md            — create first
-[ ] public/mist.js       — CREATE new file (WebGL mist engine)
-[ ] public/style.css     — remove old gradient, add dark base + transparency
-[ ] public/index.html    — add <script src="mist.js"> before </body>
-[ ] public/register.html — add <script src="mist.js"> before </body>
-[ ] public/attendance.html — add <script src="mist.js"> before </body>
-[ ] public/report.html   — add <script src="mist.js"> before </body>
-
-## If Confused Or Looping
-1. STOP. Re-read this file.
-2. Check which files are unchecked above.
-3. Do ONE file at a time. Output it fully before moving on.
+[x] MEMORY.md
+[ ] public/index.html   — full layout redesign
+[ ] public/style.css    — landing page styles added/updated

@@ -73,6 +73,90 @@
         }
       }
     });
+    
+    // Part 3: Time-Slot Based Attendance Logic Overrides
+    document.addEventListener("DOMContentLoaded", function () {
+       // Save original functions before overriding
+       const originalStartFaceRecognition = window.startFaceRecognition;
+       const originalConfirmAttendance = window.confirmAttendance;
+       
+       let activeSlot = null; // Store the currently matching slot
+
+       window.startFaceRecognition = async function() {
+          const schedule = JSON.parse(localStorage.getItem("schedule")) || [];
+          
+          if (schedule.length === 0) {
+             const proceed = confirm("No classes are scheduled. Proceed anyway? (For testing purposes)");
+             if(!proceed) return;
+             
+             // Fake a slot for testing if they proceed
+             activeSlot = { subject: "Unscheduled Class", id: "0000" };
+             if(originalStartFaceRecognition) originalStartFaceRecognition();
+             return;
+          }
+
+          const currentDayStr = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+          const now = new Date();
+          const currentTimeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+
+          activeSlot = schedule.find(slot => {
+             return slot.day === currentDayStr && currentTimeStr >= slot.start && currentTimeStr <= slot.end;
+          });
+
+          if (!activeSlot) {
+             const statusEl = document.getElementById("attendanceStatus");
+             if(statusEl) {
+                statusEl.textContent = "❌ No active class right now. Attendance can only be marked during scheduled class hours.";
+                statusEl.style.display = "block";
+                statusEl.style.color = "#ffb347";
+                statusEl.style.background = "rgba(255,179,71,0.08)";
+                statusEl.style.borderColor = "rgba(255,179,71,0.2)";
+             }
+             return; // Block execution
+          }
+
+          // Active class found, proceed with original tracking
+          if(originalStartFaceRecognition) {
+             originalStartFaceRecognition();
+             const statusEl = document.getElementById("attendanceStatus");
+             if(statusEl) {
+                statusEl.textContent = `⏳ Loading models... Active class: ${activeSlot.subject}`;
+             }
+          }
+       };
+
+       window.confirmAttendance = function() {
+          // Temporarily override to inject subject and slotId
+          if (!matchedStudent) return; // matchedStudent is global from faceRecognition.js
+          
+          let attendance = JSON.parse(localStorage.getItem("attendance")) || [];
+
+          const record = {
+            name: matchedStudent.name,
+            roll: matchedStudent.roll,
+            dept: matchedStudent.dept,
+            time: new Date().toLocaleString(),
+            subject: activeSlot ? activeSlot.subject : "—",
+            slotId: activeSlot ? activeSlot.id : null
+          };
+
+          attendance.push(record);
+          localStorage.setItem("attendance", JSON.stringify(attendance));
+          
+          const statusEl = document.getElementById("attendanceStatus");
+          if(statusEl) {
+             statusEl.textContent = `✅ Attendance marked for ${matchedStudent.name} (${record.subject})`;
+             statusEl.style.display = "block";
+             statusEl.style.color = "#22c55e";
+             statusEl.style.background = "rgba(34,197,94,0.08)";
+             statusEl.style.borderColor = "rgba(34,197,94,0.2)";
+          }
+          
+          const btn = document.getElementById("markAttendanceBtn");
+          if (btn) btn.style.display = "none";
+          matchedStudent = null;
+       };
+    });
   </script>
   <script src="mist.js"></script>
 </body>
